@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.library_btn).setOnClickListener {
             Toast.makeText(this, "You clicked on ${(it as Button).text} Button", Toast.LENGTH_SHORT).show()
         }
+
         findViewById<Button>(R.id.settings_btn).setOnClickListener {
             setContentView(R.layout.activity_settings)
 //            Toast.makeText(this, "You clicked on ${(it as Button).text} Button", Toast.LENGTH_SHORT).show()

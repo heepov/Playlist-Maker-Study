@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.PlaylistMaker">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,16 +16,16 @@
         android:orientation="vertical">
 
         <TextView
+            style="@style/H1_text"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="40dp"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="@dimen/H1_text_size"/>
+            android:text="@string/app_name"/>
 
         <Button
             android:id="@+id/search_btn"
-            style="@style/main_btn.main_screen_btn_light"
+            style="@style/btn.main_screen_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -33,7 +34,7 @@
 
         <Button
             android:id="@+id/library_btn"
-            style="@style/main_btn.main_screen_btn_light"
+            style="@style/btn.main_screen_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -45,7 +46,7 @@
 
         <Button
             android:id="@+id/settings_btn"
-            style="@style/main_btn.main_screen_btn_light"
+            style="@style/btn.main_screen_btn"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

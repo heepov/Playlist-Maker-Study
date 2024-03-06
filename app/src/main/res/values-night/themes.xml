@@ -1,14 +1,23 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Customize your dark theme here. -->
+    <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/black</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="tint">@color/white</item>
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
-    <style name="white_bg" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:background">@color/black</item>
+
+    <style name="Theme.PlaylistMaker.theme"></style>А ну
+
+    <style name="icon.settings_item_second_element.theme">
         <item name="tint">@color/white</item>
+    </style>
+
+    <style name="H1_text.theme">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="p_text.theme">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="icon.back_arrow_btn.theme">
+        <item name="android:tint">@color/white</item>
     </style>
 </resources>
