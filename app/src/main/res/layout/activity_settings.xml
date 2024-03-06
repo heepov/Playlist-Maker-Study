@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,72 +8,84 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginStart="@dimen/primary_margin_padding_size"
-        android:layout_marginEnd="@dimen/small_right_margin">
+        android:layout_marginEnd="@dimen/small_right_margin"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/primary_margin_padding_size"
             android:orientation="horizontal">
+
             <ImageView
-                android:clickable="true"
-                android:focusable="true"
                 android:id="@+id/back_button"
                 style="@style/icon.back_arrow_btn.theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
 
                 android:layout_marginTop="3dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_arrow_back"
-                app:iconSize="@dimen/primary_icon_size"/>
+                app:iconSize="@dimen/primary_icon_size" />
+
             <TextView
                 style="@style/H1_text.theme"
-                android:layout_marginStart="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings"/>
+                android:layout_marginStart="24dp"
+                android:text="@string/settings" />
         </LinearLayout>
 
 
-        <FrameLayout style="@style/settings_item" android:layout_marginTop="40dp">
+        <FrameLayout
+            style="@style/settings_item"
+            android:layout_marginTop="40dp">
+
             <TextView
                 style="@style/p_text.theme.settings_item_first_element"
-                android:text="@string/dark_theme"/>
+                android:text="@string/dark_theme" />
+
             <Switch
                 android:id="@+id/switcher_theme"
+                style="@style/icon.settings_item_second_element.theme"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/icon.settings_item_second_element.theme"/>
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <FrameLayout style="@style/settings_item">
+
             <TextView
                 style="@style/p_text.theme.settings_item_first_element"
-                android:text="@string/share_app"/>
+                android:text="@string/share_app" />
+
             <ImageView
                 style="@style/icon.settings_item_second_element.theme"
-                android:src="@drawable/ic_share"/>
+                android:src="@drawable/ic_share" />
         </FrameLayout>
 
         <FrameLayout style="@style/settings_item">
+
             <TextView
                 style="@style/p_text.theme.settings_item_first_element"
-                android:text="@string/write_support"/>
+                android:text="@string/write_support" />
+
             <ImageView
                 style="@style/icon.settings_item_second_element.theme"
-                android:src="@drawable/ic_support"/>
+                android:src="@drawable/ic_support" />
         </FrameLayout>
 
         <FrameLayout style="@style/settings_item">
+
             <TextView
                 style="@style/p_text.theme.settings_item_first_element"
-                android:text="@string/terms"/>
+                android:text="@string/terms" />
+
             <ImageView
                 style="@style/icon.settings_item_second_element.theme"
-                android:src="@drawable/ic_arrow_forward"/>
+                android:src="@drawable/ic_arrow_forward" />
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

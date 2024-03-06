@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         findViewById<Button>(R.id.search_btn).setOnClickListener {
-            startActivity(Intent(this,SearchActivity::class.java))
+            startActivity(Intent(this, SearchActivity::class.java))
         }
 
         findViewById<Button>(R.id.library_btn).setOnClickListener {
-            startActivity(Intent(this,LibraryActivity::class.java))
+            startActivity(Intent(this, LibraryActivity::class.java))
         }
 
         findViewById<Button>(R.id.settings_btn).setOnClickListener {

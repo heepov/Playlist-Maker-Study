@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:theme="@style/Theme.PlaylistMaker.theme"
     tools:context=".SearchActivity">
+
     <TextView
+        style="@style/H1_text.theme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/library"
         android:gravity="center"
-        style="@style/H1_text.theme"/>
+        android:text="@string/library" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

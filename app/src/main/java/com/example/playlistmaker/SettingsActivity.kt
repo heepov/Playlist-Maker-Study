@@ -17,7 +17,8 @@ class SettingsActivity : AppCompatActivity() {
         val switcher = findViewById<Switch>(R.id.switcher_theme)
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
-        val isDarkMode = sharedPreferences.getBoolean("IS_DARK_THEME",
+        val isDarkMode = sharedPreferences.getBoolean(
+            "IS_DARK_THEME",
             when (currentNightMode) {
                 Configuration.UI_MODE_NIGHT_YES -> true
                 Configuration.UI_MODE_NIGHT_NO -> false
