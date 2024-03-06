@@ -44,6 +44,7 @@
                 style="@style/p_text.theme.settings_item_first_element"
                 android:text="@string/dark_theme"/>
             <Switch
+                android:id="@+id/switcher_theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/icon.settings_item_second_element.theme"/>

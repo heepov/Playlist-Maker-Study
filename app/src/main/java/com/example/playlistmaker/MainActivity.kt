@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,19 +13,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.search_btn).setOnClickListener(
-            object : View.OnClickListener{override fun onClick(v: View?) {
-                Toast.makeText(this@MainActivity,"You clicked on Search Button",Toast.LENGTH_SHORT).show()
-            }}
-        )
+        findViewById<Button>(R.id.search_btn).setOnClickListener {
+            startActivity(Intent(this,SearchActivity::class.java))
+        }
 
         findViewById<Button>(R.id.library_btn).setOnClickListener {
-            Toast.makeText(this, "You clicked on ${(it as Button).text} Button", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,LibraryActivity::class.java))
         }
 
         findViewById<Button>(R.id.settings_btn).setOnClickListener {
-            setContentView(R.layout.activity_settings)
-//            Toast.makeText(this, "You clicked on ${(it as Button).text} Button", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
     }
