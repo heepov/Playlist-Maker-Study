@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/white_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/primary_margin_padding_size"
+        android:layout_marginEnd="@dimen/small_right_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/primary_margin_padding_size"
+            android:orientation="horizontal">
+            <ImageView
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/back_button"
+
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_marginTop="3dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back"
+                app:iconSize="@dimen/primary_icon_size"
+                style="@style/white_bg"/>
+            <TextView
+                android:layout_marginStart="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/H1_text"
+                android:text="@string/settings"/>
+        </LinearLayout>
+
+
+        <FrameLayout style="@style/settings_item" android:layout_marginTop="40dp">
+            <TextView
+                style="@style/p_text.settings_item_first_element"
+                android:text="@string/dark_theme"/>
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/settings_item_second_element"/>
+        </FrameLayout>
+
+        <FrameLayout style="@style/settings_item">
+            <TextView
+                style="@style/p_text.settings_item_first_element"
+                android:text="@string/share_app"/>
+            <ImageView
+                style="@style/settings_item_second_element"
+                android:src="@drawable/ic_share"/>
+        </FrameLayout>
+
+        <FrameLayout style="@style/settings_item">
+            <TextView
+                style="@style/p_text.settings_item_first_element"
+                android:text="@string/write_support"/>
+            <ImageView
+                style="@style/settings_item_second_element"
+                android:src="@drawable/ic_support"/>
+        </FrameLayout>
+
+        <FrameLayout style="@style/settings_item">
+            <TextView
+                style="@style/p_text.settings_item_first_element"
+                android:text="@string/terms"/>
+            <ImageView
+                style="@style/settings_item_second_element"
+                android:src="@drawable/ic_arrow_forward"/>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
