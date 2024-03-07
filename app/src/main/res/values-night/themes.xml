@@ -4,7 +4,7 @@
         <item name="android:background">@color/black</item>
     </style>
 
-    <style name="Theme.PlaylistMaker.theme"></style>А ну
+    <style name="Theme.PlaylistMaker.theme"></style>
 
     <style name="icon.settings_item_second_element.theme">
         <item name="tint">@color/white</item>
