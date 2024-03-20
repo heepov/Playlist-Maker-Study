@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="H1_text_size">22sp</dimen>
-    <dimen name="p_text_size">16sp</dimen>
-    <dimen name="primary_icon_size">24dp</dimen>
-    <dimen name="primary_margin_padding_size">16dp</dimen>
-    <dimen name="settings_item_padding_margin_size">21dp</dimen>
-    <dimen name="btn_corner_radius">16dp</dimen>
-    <dimen name="small_right_margin">12dp</dimen>
+    <dimen name="h1TextSize">22sp</dimen>
+    <dimen name="h5TextSize">12sp</dimen>
+    <dimen name="pTextSize">16sp</dimen>
+    <dimen name="primaryIconSize">24dp</dimen>
+    <dimen name="primaryMarginPaddingSize">16dp</dimen>
+    <dimen name="secondaryMarginPaddingSize">12dp</dimen>
+    <dimen name="settingsItemPaddingMarginSize">20dp</dimen>
+    <dimen name="btnCornerRadius">16dp</dimen>
 </resources>

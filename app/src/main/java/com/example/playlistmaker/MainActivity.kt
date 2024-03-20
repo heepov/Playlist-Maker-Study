@@ -3,9 +3,7 @@ package com.example.playlistmaker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,15 +11,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.search_btn).setOnClickListener {
+        findViewById<Button>(R.id.btnSearch).setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
         }
 
-        findViewById<Button>(R.id.library_btn).setOnClickListener {
+        findViewById<Button>(R.id.btnLibrary).setOnClickListener {
             startActivity(Intent(this, LibraryActivity::class.java))
         }
 
-        findViewById<Button>(R.id.settings_btn).setOnClickListener {
+        findViewById<Button>(R.id.btnSettings).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 

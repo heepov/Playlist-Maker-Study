@@ -14,7 +14,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        val switcher = findViewById<Switch>(R.id.switcher_theme)
+        val switcher = findViewById<Switch>(R.id.swTheme)
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
         val isDarkMode = sharedPreferences.getBoolean(
@@ -39,7 +39,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<ImageView>(R.id.back_button).setOnClickListener {
+        findViewById<ImageView>(R.id.btnBack).setOnClickListener {
             finish()
         }
     }
