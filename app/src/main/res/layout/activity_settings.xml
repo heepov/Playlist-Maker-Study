@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/btnBack"
+                android:id="@+id/iwBack"
                 style="@style/icon.btnBack.theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,35 +54,41 @@
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
-        <FrameLayout style="@style/settingsItem">
+        <FrameLayout
+            style="@style/settingsItem">
 
             <TextView
                 style="@style/p.theme.settingsStartItem"
                 android:text="@string/shareApp" />
 
             <ImageView
+                android:id="@+id/iwShareApp"
                 style="@style/icon.settingsEndItem.theme"
                 android:src="@drawable/ic_share" />
         </FrameLayout>
 
-        <FrameLayout style="@style/settingsItem">
+        <FrameLayout
+            style="@style/settingsItem">
 
             <TextView
                 style="@style/p.theme.settingsStartItem"
                 android:text="@string/writeSupport" />
 
             <ImageView
+                android:id="@+id/iwWriteSupport"
                 style="@style/icon.settingsEndItem.theme"
                 android:src="@drawable/ic_support" />
         </FrameLayout>
 
-        <FrameLayout style="@style/settingsItem">
+        <FrameLayout
+            style="@style/settingsItem">
 
             <TextView
                 style="@style/p.theme.settingsStartItem"
                 android:text="@string/terms" />
 
             <ImageView
+                android:id="@+id/iwTerms"
                 style="@style/icon.settingsEndItem.theme"
                 android:baselineAlignBottom="false"
                 android:src="@drawable/ic_arrow_forward" />

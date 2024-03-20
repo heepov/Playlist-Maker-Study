@@ -8,4 +8,6 @@
     <string name="shareApp">Share this app</string>
     <string name="writeSupport">Write to support</string>
     <string name="terms">Terms of use</string>
+    <string name="supportMailSubject">Message to the developers of the Playlist Maker application</string>
+    <string name="supportMailText">Thanks to the developers for the cool app!</string>
 </resources>
