@@ -54,8 +54,7 @@
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
-        <FrameLayout
-            style="@style/settingsItem">
+        <FrameLayout style="@style/settingsItem">
 
             <TextView
                 style="@style/p.theme.settingsStartItem"
@@ -67,8 +66,7 @@
                 android:src="@drawable/ic_share" />
         </FrameLayout>
 
-        <FrameLayout
-            style="@style/settingsItem">
+        <FrameLayout style="@style/settingsItem">
 
             <TextView
                 style="@style/p.theme.settingsStartItem"
@@ -80,8 +78,7 @@
                 android:src="@drawable/ic_support" />
         </FrameLayout>
 
-        <FrameLayout
-            style="@style/settingsItem">
+        <FrameLayout style="@style/settingsItem">
 
             <TextView
                 style="@style/p.theme.settingsStartItem"
@@ -96,9 +93,9 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
         android:gravity="bottom"
         android:orientation="horizontal">
 

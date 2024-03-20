@@ -13,7 +13,7 @@
     </style>
     <style name="btn.bottomBar">
         <item name="fontFamily">@font/ys_display_regular</item>
-        <item name="android:textSize">@dimen/h5TextSize</item>
+        <item name="android:textSize">@dimen/p5TextSize</item>
         <item name="iconGravity">top</item>
         <item name="iconPadding">0dp</item>
         <item name="iconSize">@dimen/primaryIconSize</item>
@@ -25,7 +25,7 @@
         <item name="cornerRadius">@dimen/btnCornerRadius</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/h1TextSize</item>
+        <item name="android:textSize">@dimen/h3TextSize</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">8dp</item>
         <item name="iconTint">@color/black</item>
@@ -45,13 +45,13 @@
 
     <style name="h1">
         <item name="fontFamily">@font/ys_display_medium</item>
-        <item name="android:textSize">@dimen/h1TextSize</item>
+        <item name="android:textSize">@dimen/h3TextSize</item>
     </style>
 
     <style name="p">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">@dimen/pTextSize</item>
+        <item name="android:textSize">@dimen/p2TextSize</item>
     </style>
 
     <style name="p.theme.settingsStartItem">

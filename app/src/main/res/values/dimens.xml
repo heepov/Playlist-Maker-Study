@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="h1TextSize">22sp</dimen>
-    <dimen name="h5TextSize">12sp</dimen>
-    <dimen name="pTextSize">16sp</dimen>
+    <dimen name="h1TextSize">32sp</dimen>
+    <dimen name="h2TextSize">24sp</dimen>
+    <dimen name="h3TextSize">22sp</dimen>
+    <dimen name="h4TextSize">19sp</dimen>
+    <dimen name="h5TextSize">16sp</dimen>
+    <dimen name="h6TextSize">14sp</dimen>
+
+
+    <dimen name="p1TextSize">18sp</dimen>
+    <dimen name="p2TextSize">16sp</dimen>
+    <dimen name="p3TextSize">14sp</dimen>
+    <dimen name="p4TextSize">13sp</dimen>
+    <dimen name="p5TextSize">12sp</dimen>
+    <dimen name="p6TextSize">11sp</dimen>
+
     <dimen name="primaryIconSize">24dp</dimen>
+    <dimen name="secondaryIconSize">16dp</dimen>
+
     <dimen name="primaryMarginPaddingSize">16dp</dimen>
     <dimen name="secondaryMarginPaddingSize">12dp</dimen>
+
     <dimen name="settingsItemPaddingMarginSize">20dp</dimen>
+
     <dimen name="btnCornerRadius">16dp</dimen>
 </resources>

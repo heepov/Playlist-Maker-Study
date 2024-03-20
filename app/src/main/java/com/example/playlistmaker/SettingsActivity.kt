@@ -58,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun vibrate() {
         if (vibrator.hasVibrator()) {
-            // set vibration on 50 milliseconds
+            // set vibration on 50 milliseconds with default vibrate
             vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
