@@ -20,8 +20,15 @@
 
     <dimen name="primaryMarginPaddingSize">16dp</dimen>
     <dimen name="secondaryMarginPaddingSize">12dp</dimen>
+    <dimen name="bigMarginPaddingSize">24dp</dimen>
+    <dimen name="largeMarginPaddingSize">28dp</dimen>
+    <dimen name="smallMarginPaddingSize">8dp</dimen>
 
     <dimen name="settingsItemPaddingMarginSize">20dp</dimen>
 
-    <dimen name="btnCornerRadius">16dp</dimen>
+    <dimen name="bigCornerRadius">16dp</dimen>
+    <dimen name="smallCornerRadius">8dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

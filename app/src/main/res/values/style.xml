@@ -22,7 +22,7 @@
     <style name="btn.mainActivity">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="cornerRadius">@dimen/btnCornerRadius</item>
+        <item name="cornerRadius">@dimen/bigCornerRadius</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/h3TextSize</item>
@@ -75,4 +75,12 @@
 <!--        <item name="iconGravity">textStart</item>-->
     </style>
 
+    <style name="p.searchField">
+        <item name="android:padding">@dimen/smallMarginPaddingSize</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="searchFieldIcon">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>

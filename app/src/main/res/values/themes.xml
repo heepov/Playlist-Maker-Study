@@ -28,5 +28,19 @@
         <item name="iconTint">@color/black</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="searchFieldBg">
+        <item name="android:backgroundTint">@color/grayLight</item>
+    </style>
+
+    <style name="p.searchField.theme">
+        <item name="android:textColorHint">@color/grayDark</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="searchFieldIcon.theme">
+        <item name="tint">@color/grayDark</item>
+    </style>
+
+
 </resources>
 

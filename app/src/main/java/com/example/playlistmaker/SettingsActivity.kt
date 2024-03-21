@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -50,7 +49,7 @@ class SettingsActivity : AppCompatActivity() {
             vibrate()
         }
 
-        findViewById<ImageView>(R.id.iwBack).setOnClickListener {
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
             vibrate()
             finish()
         }
