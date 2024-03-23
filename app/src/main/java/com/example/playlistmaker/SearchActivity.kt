@@ -1,42 +1,53 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var vibrator: Vibrator
-    private lateinit var searchString:String
+    private var searchString: String = SEARCH_STRING_DEF
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        val inputEditText = findViewById<EditText>(R.id.etSearchField)
+        if (searchString!="")
+            inputEditText.setText(searchString)
+
+// Не очень понял зачем нам переопределять onRestoreInstanceState если можно напрямую получить данные
+//        if (savedInstanceState != null) {
+//            inputEditText.setText(
+//                savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
+//            )
+//        }
+
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener {
             vibrate()
             finish()
         }
-        val inputEditText = findViewById<EditText>(R.id.etSearchField)
         val clearButton = findViewById<ImageView>(R.id.ivSearchFieldCloseButton)
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
             vibrate()
         }
 
-        if (savedInstanceState != null) {
-            inputEditText.setText(savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF))
-        }
 
-    val simpleTextWatcher = object : TextWatcher {
+        val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -50,6 +61,11 @@ class SearchActivity : AppCompatActivity() {
 
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        searchString = savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -77,6 +93,7 @@ class SearchActivity : AppCompatActivity() {
         vibrator.cancel()
         super.onDestroy()
     }
+
     companion object {
         const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
         const val SEARCH_STRING_DEF = ""
