@@ -1,9 +1,6 @@
 package com.example.playlistmaker
 
-import android.content.Context
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,14 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var vibrator: Vibrator
     private var searchString: String = SEARCH_STRING_DEF
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
         val inputEditText = findViewById<EditText>(R.id.etSearchField)
-        if (searchString!="")
+        if (searchString != "")
             inputEditText.setText(searchString)
 
 // Не очень понял зачем нам переопределять onRestoreInstanceState если можно напрямую получить данные
@@ -30,8 +26,6 @@ class SearchActivity : AppCompatActivity() {
 //                savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
 //            )
 //        }
-
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener {
             vibrate()
@@ -79,19 +73,6 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
-    }
-
-    private fun vibrate() {
-        if (vibrator.hasVibrator()) {
-            // set vibration on 50 milliseconds with default vibrate
-            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-        }
-    }
-
-    override fun onDestroy() {
-        // destroy vibrator
-        vibrator.cancel()
-        super.onDestroy()
     }
 
     companion object {

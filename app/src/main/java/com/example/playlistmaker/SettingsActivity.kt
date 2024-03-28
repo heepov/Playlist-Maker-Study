@@ -1,11 +1,8 @@
 package com.example.playlistmaker
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Switch
@@ -13,16 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var vibrator: Vibrator
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
         //я знаю что свитчер работает некорректно при первом запуске
         val switcherTheme = findViewById<Switch>(R.id.swTheme)
-        switcherTheme.isChecked = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        switcherTheme.isChecked =
+            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
         switcherTheme.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -70,16 +65,4 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun vibrate() {
-        if (vibrator.hasVibrator()) {
-            // set vibration on 50 milliseconds with default vibrate
-            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-        }
-    }
-
-    override fun onDestroy() {
-        // destroy vibrator
-        vibrator.cancel()
-        super.onDestroy()
-    }
 }
