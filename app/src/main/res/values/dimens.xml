@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="H1_text_size">22sp</dimen>
-    <dimen name="p_text_size">16sp</dimen>
-    <dimen name="primary_icon_size">24dp</dimen>
-    <dimen name="primary_margin_padding_size">16dp</dimen>
-    <dimen name="settings_item_padding_margin_size">21dp</dimen>
-    <dimen name="btn_corner_radius">16dp</dimen>
-    <dimen name="small_right_margin">12dp</dimen>
+    <dimen name="h1TextSize">32sp</dimen>
+    <dimen name="h2TextSize">24sp</dimen>
+    <dimen name="h3TextSize">22sp</dimen>
+    <dimen name="h4TextSize">19sp</dimen>
+    <dimen name="h5TextSize">16sp</dimen>
+    <dimen name="h6TextSize">14sp</dimen>
+
+
+    <dimen name="p1TextSize">18sp</dimen>
+    <dimen name="p2TextSize">16sp</dimen>
+    <dimen name="p3TextSize">14sp</dimen>
+    <dimen name="p4TextSize">13sp</dimen>
+    <dimen name="p5TextSize">12sp</dimen>
+    <dimen name="p6TextSize">11sp</dimen>
+
+    <dimen name="primaryIconSize">24dp</dimen>
+    <dimen name="secondaryIconSize">16dp</dimen>
+
+    <dimen name="primaryMarginPaddingSize">16dp</dimen>
+    <dimen name="secondaryMarginPaddingSize">12dp</dimen>
+    <dimen name="bigMarginPaddingSize">24dp</dimen>
+    <dimen name="largeMarginPaddingSize">28dp</dimen>
+    <dimen name="smallMarginPaddingSize">8dp</dimen>
+
+    <dimen name="settingsItemPaddingMarginSize">20dp</dimen>
+
+    <dimen name="bigCornerRadius">16dp</dimen>
+    <dimen name="smallCornerRadius">8dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

@@ -8,20 +8,39 @@
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="icon.settings_item_second_element.theme">
-        <item name="tint">@color/gray</item>
+    <style name="icon.settingsEndItem.theme">
+        <item name="tint">@color/grayDark</item>
     </style>
 
-    <style name="H1_text.theme">
+    <style name="h1.theme">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="p_text.theme">
+    <style name="p.theme">
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="icon.back_arrow_btn.theme">
+    <style name="icon.btnBack.theme">
         <item name="android:tint">@color/black</item>
     </style>
+
+    <style name="btn.bottomBar.theme">
+        <item name="iconTint">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="searchFieldBg">
+        <item name="android:backgroundTint">@color/grayLight</item>
+    </style>
+
+    <style name="p.searchField.theme">
+        <item name="android:textColorHint">@color/grayDark</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="searchFieldIcon.theme">
+        <item name="tint">@color/grayDark</item>
+    </style>
+
+
 </resources>
 

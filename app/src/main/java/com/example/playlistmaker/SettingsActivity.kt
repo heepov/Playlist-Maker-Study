@@ -1,11 +1,11 @@
 package com.example.playlistmaker
 
-import android.content.Context
-import android.content.res.Configuration
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Switch
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
@@ -13,34 +13,56 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        val switcher = findViewById<Switch>(R.id.switcher_theme)
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
-        val isDarkMode = sharedPreferences.getBoolean(
-            "IS_DARK_THEME",
-            when (currentNightMode) {
-                Configuration.UI_MODE_NIGHT_YES -> true
-                Configuration.UI_MODE_NIGHT_NO -> false
-                else -> false
-            }
-        )
-
-        Toast.makeText(this, "Is Dark Mode: $isDarkMode", Toast.LENGTH_SHORT).show()
-
-        switcher.isChecked = isDarkMode
-
-        switcher.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences.edit().putBoolean("IS_DARK_THEME", isChecked).apply()
-            if (isChecked) {
+        //я знаю что свитчер работает некорректно при первом запуске
+        val switcherTheme = findViewById<Switch>(R.id.swTheme)
+        switcherTheme.isChecked =
+            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        switcherTheme.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
+            else
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
         }
 
-        findViewById<ImageView>(R.id.back_button).setOnClickListener {
+
+        findViewById<ImageView>(R.id.iwShareApp).setOnClickListener {
+            Intent(Intent.ACTION_SEND).run {
+                setType("text/plain")
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.shareLink))
+                startActivity(this)
+            }
+            vibrate()
+        }
+
+        findViewById<ImageView>(R.id.iwWriteSupport).setOnClickListener {
+            Intent(Intent.ACTION_SENDTO).run {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.supportEmailAddress)))
+                putExtra(
+                    Intent.EXTRA_SUBJECT,
+                    getString(R.string.supportMailSubject)
+                )
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    getString(R.string.supportMailText)
+                )
+                startActivity(this)
+            }
+            vibrate()
+        }
+        findViewById<ImageView>(R.id.iwTerms).setOnClickListener {
+            Intent(Intent.ACTION_VIEW).run {
+                setData(Uri.parse(getString(R.string.termsLink)))
+                startActivity(this)
+            }
+            vibrate()
+        }
+
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+            vibrate()
             finish()
         }
     }
+
 }

@@ -1,64 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="btn">
+    <style name="btn" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
     </style>
+    <style name="btn.bottomBar">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/p5TextSize</item>
+        <item name="iconGravity">top</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconSize">@dimen/primaryIconSize</item>
 
-    <style name="btn.main_screen_btn">
+    </style>
+    <style name="btn.mainActivity">
+        <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="cornerRadius">@dimen/btn_corner_radius</item>
+        <item name="cornerRadius">@dimen/bigCornerRadius</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/H1_text_size</item>
+        <item name="android:textSize">@dimen/h3TextSize</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">8dp</item>
         <item name="iconTint">@color/black</item>
-        <item name="iconSize">@dimen/primary_icon_size</item>
-        <item name="android:textStyle">bold</item>
+        <item name="iconSize">@dimen/primaryIconSize</item>
     </style>
 
-    <style name="settings_item">
+    <style name="settingsItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">@dimen/settings_item_padding_margin_size</item>
-        <item name="android:paddingBottom">@dimen/settings_item_padding_margin_size</item>
+        <item name="android:paddingTop">@dimen/settingsItemPaddingMarginSize</item>
+        <item name="android:paddingBottom">@dimen/settingsItemPaddingMarginSize</item>
     </style>
 
     <style name="icon">
-        <item name="iconSize">@dimen/primary_icon_size</item>
+        <item name="iconSize">@dimen/primaryIconSize</item>
     </style>
 
-    <style name="H1_text">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/H1_text_size</item>
+    <style name="h1">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h3TextSize</item>
     </style>
 
-    <style name="p_text">
+    <style name="p">
+        <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:textSize">@dimen/p_text_size</item>
+        <item name="android:textSize">@dimen/p2TextSize</item>
     </style>
 
-    <style name="p_text.theme.settings_item_first_element">
+    <style name="p.theme.settingsStartItem">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">start</item>
     </style>
 
-    <style name="icon.settings_item_second_element">
+    <style name="icon.settingsEndItem">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end</item>
     </style>
 
-    <style name="icon.back_arrow_btn">
+    <style name="icon.btnBack">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
         <item name="android:backgroundTint">@android:color/transparent</item>
-        <item name="iconGravity">textStart</item>
+<!--        <item name="iconGravity">textStart</item>-->
     </style>
 
+    <style name="p.searchField">
+        <item name="android:padding">@dimen/smallMarginPaddingSize</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="searchFieldIcon">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>
