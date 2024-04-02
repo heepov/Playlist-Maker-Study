@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingStart="@dimen/primaryMarginPaddingSize"
-    android:paddingEnd="@dimen/secondaryMarginPaddingSize"
     android:paddingTop="@dimen/primaryMarginPaddingSize"
+    android:paddingEnd="@dimen/secondaryMarginPaddingSize"
     android:paddingBottom="@dimen/primaryMarginPaddingSize"
     android:theme="@style/Theme.PlaylistMaker.theme">
 
