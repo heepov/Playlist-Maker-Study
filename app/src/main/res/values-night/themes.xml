@@ -38,9 +38,13 @@
     </style>
     <style name="p.songCard">
         <item name="android:textColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
     </style>
     <style name="p6.songCard">
         <item name="android:textColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
     </style>
     <style name="icon.songCard">
         <item name="tint">@color/white</item>
@@ -48,7 +52,6 @@
     <style name="separator.songCard">
         <item name="tint">@color/white</item>
     </style>
-
     <style name="searchFieldIcon.theme">
         <item name="tint">@color/black</item>
     </style>
