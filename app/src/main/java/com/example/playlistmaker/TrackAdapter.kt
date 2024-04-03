@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class TrackAdapter(private val songs: List<TrackCard>) : RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
+class TrackAdapter(private val songs: List<TrackCard>) :
+    RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackCardViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -45,12 +46,13 @@ class TrackAdapter(private val songs: List<TrackCard>) : RecyclerView.Adapter<Tr
             twArtistName.text = model.artist
             twSongDuration.text = formatDuration(model.duration)
         }
+
         private fun formatDuration(duration: Long): String {
             val seconds = duration / 1000
-            return if (seconds%60>9)
-                "${seconds/60}:${seconds%60}"
+            return if (seconds % 60 > 9)
+                "${seconds / 60}:${seconds % 60}"
             else
-                "${seconds/60}:0${seconds%60}"
+                "${seconds / 60}:0${seconds % 60}"
         }
     }
 }
