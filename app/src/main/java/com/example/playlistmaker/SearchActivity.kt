@@ -58,13 +58,13 @@ class SearchActivity : AppCompatActivity() {
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
         val recyclerView = findViewById<RecyclerView>(R.id.rvSongSearchList)
-        recyclerView.adapter = SongAdapter(
+        recyclerView.adapter = TrackAdapter(
             songs = List(5) {
-                SongAdapter.SongCard(
+                TrackCard(
                     imageUrl = songsImages[it],
                     title = songsTitles[it],
-                    artistName = songsArtists[it],
-                    songDuration = songsDuration[it]
+                    artist = songsArtists[it],
+                    duration = songsDuration[it]
                 )
             }
         )
@@ -108,6 +108,6 @@ class SearchActivity : AppCompatActivity() {
             "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg",
             "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
         )
-        val songsDuration = arrayOf(301, 275, 250, 333, 303)
+        val songsDuration = arrayOf(301000L, 275000L, 250000L, 333000L, 303000L)
     }
 }

@@ -4,33 +4,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class SongAdapter(private val songs: List<SongCard>) : RecyclerView.Adapter<SongAdapter.SongCardViewHolder>() {
+class TrackAdapter(private val songs: List<TrackCard>) : RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongCardViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackCardViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.song_card_view, parent, false)
-        return SongCardViewHolder(view)
+        return TrackCardViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SongCardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TrackCardViewHolder, position: Int) {
         holder.bind(songs[position])
     }
 
     override fun getItemCount() = songs.size
 
-    data class SongCard(
-        val imageUrl: String,
-        val title: String,
-        val artistName: String,
-        val songDuration: Int,
-    )
-
-    class SongCardViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
+    class TrackCardViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
         private val iwSongImage: ImageView
         private val twSongTitle: TextView
         private val twArtistName: TextView
@@ -43,21 +35,22 @@ class SongAdapter(private val songs: List<SongCard>) : RecyclerView.Adapter<Song
             twSongDuration = parentView.findViewById(R.id.twSongDuration)
         }
 
-        fun bind(model: SongCard) {
+        fun bind(model: TrackCard) {
             Glide.with(itemView)
                 .load(model.imageUrl)
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
                 .into(iwSongImage)
             twSongTitle.text = model.title
-            twArtistName.text = model.artistName
-            twSongDuration.text = formatDuration(model.songDuration)
+            twArtistName.text = model.artist
+            twSongDuration.text = formatDuration(model.duration)
         }
-        private fun formatDuration(duration: Int): String {
-            return if (duration%60>9)
-                "${duration/60}:${duration%60}"
+        private fun formatDuration(duration: Long): String {
+            val seconds = duration / 1000
+            return if (seconds%60>9)
+                "${seconds/60}:${seconds%60}"
             else
-                "${duration/60}:0${duration%60}"
+                "${seconds/60}:0${seconds%60}"
         }
     }
 }
