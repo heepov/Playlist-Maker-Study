@@ -48,9 +48,9 @@
                 <TextView
                     android:id="@+id/twArtistName"
                     style="@style/p6.songCard"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="The Beatles" />
 
                 <ImageView
