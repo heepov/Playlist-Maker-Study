@@ -1,12 +1,14 @@
 package com.example.playlistmaker
 
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackAdapter(private val songs: List<TrackCard>) :
     RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
@@ -41,6 +43,7 @@ class TrackAdapter(private val songs: List<TrackCard>) :
                 .load(model.imageUrl)
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
+//                .transform(RoundedCorners(4)) // я знаю как скруглить улы через glide (но я не хочу этого делать так как это скругление использует px а не dp)
                 .into(iwSongImage)
             twSongTitle.text = model.title
             twArtistName.text = model.artist
