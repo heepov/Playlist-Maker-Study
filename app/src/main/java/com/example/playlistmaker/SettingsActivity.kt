@@ -3,7 +3,6 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity

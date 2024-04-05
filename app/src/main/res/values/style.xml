@@ -41,6 +41,8 @@
     <style name="icon">
         <item name="iconSize">@dimen/primaryIconSize</item>
     </style>
+    <style name="separator"/>
+
 
     <style name="h1">
         <item name="fontFamily">@font/ys_display_medium</item>
@@ -51,6 +53,11 @@
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/p2TextSize</item>
+    </style>
+    <style name="p6">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/p6TextSize</item>
     </style>
 
     <style name="p.theme.settingsStartItem">
@@ -78,6 +85,7 @@
         <item name="android:padding">@dimen/smallMarginPaddingSize</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
     <style name="searchFieldIcon">
         <item name="android:layout_gravity">center</item>
         <item name="android:background">@android:color/transparent</item>
