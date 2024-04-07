@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,10 @@ class TrackAdapter(private val songs: List<TrackCard>) :
     RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackCardViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.song_card_view, parent, false)
-        return TrackCardViewHolder(view)
+        return TrackCardViewHolder(parent)
     }
+
+
 
     override fun onBindViewHolder(holder: TrackCardViewHolder, position: Int) {
         holder.bind(songs[position])
@@ -24,17 +25,19 @@ class TrackAdapter(private val songs: List<TrackCard>) :
 
     override fun getItemCount() = songs.size
 
-    class TrackCardViewHolder(parentView: View) : RecyclerView.ViewHolder(parentView) {
+    class TrackCardViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.song_card_view, parent, false)
+    ) {
         private val iwSongImage: ImageView
         private val twSongTitle: TextView
         private val twArtistName: TextView
         private val twSongDuration: TextView
 
         init {
-            iwSongImage = parentView.findViewById(R.id.iwSongImage)
-            twSongTitle = parentView.findViewById(R.id.twSongTitle)
-            twArtistName = parentView.findViewById(R.id.twArtistName)
-            twSongDuration = parentView.findViewById(R.id.twSongDuration)
+            iwSongImage = itemView.findViewById(R.id.iwSongImage)
+            twSongTitle = itemView.findViewById(R.id.twSongTitle)
+            twArtistName = itemView.findViewById(R.id.twArtistName)
+            twSongDuration = itemView.findViewById(R.id.twSongDuration)
         }
 
         fun bind(model: TrackCard) {
@@ -42,7 +45,6 @@ class TrackAdapter(private val songs: List<TrackCard>) :
                 .load(model.imageUrl)
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
-//                .transform(RoundedCorners(4)) // я знаю как скруглить улы через glide (но я не хочу этого делать так как это скругление использует px а не dp)
                 .into(iwSongImage)
             twSongTitle.text = model.title
             twArtistName.text = model.artist
