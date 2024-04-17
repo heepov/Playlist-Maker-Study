@@ -10,4 +10,9 @@
     <string name="terms">Terms of use</string>
     <string name="supportMailSubject">Message to the developers of the Playlist Maker application</string>
     <string name="supportMailText">Thanks to the developers for the cool app!</string>
+    <string name="noFoundResults">No results found</string>
+    <string name="connectionProblem">Connection problem</string>
+    <string name="uploadFailed">Upload failed. Check your internet connection</string>
+    <string name="refresh">Refresh</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

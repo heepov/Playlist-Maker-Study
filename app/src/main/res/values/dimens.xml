@@ -26,6 +26,7 @@
 
     <dimen name="settingsItemPaddingMarginSize">20dp</dimen>
 
+    <dimen name="largeCornerRadius">54dp</dimen>
     <dimen name="bigCornerRadius">16dp</dimen>
     <dimen name="smallCornerRadius">8dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->

@@ -48,24 +48,25 @@
                 <TextView
                     android:id="@+id/twArtistName"
                     style="@style/p6.songCard"
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
-                    android:text="The Beatles" />
+                    android:text="The Beatlesadasdadaddaadasd" />
 
-                <ImageView
-                    style="@style/separator.songCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_circle_separator" />
 
-                <TextView
-                    android:id="@+id/twSongDuration"
-                    style="@style/p6.songCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2:55" />
+                    <ImageView
+                        style="@style/separator.songCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_circle_separator" />
+
+                    <TextView
+                        android:id="@+id/twSongDuration"
+                        style="@style/p6.songCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2:55" />
             </LinearLayout>
         </LinearLayout>
 
