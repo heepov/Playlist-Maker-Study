@@ -53,10 +53,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/search"
-            android:inputType="text"
             android:imeOptions="actionDone"
-            android:singleLine="true"
-            android:lines="1" />
+            android:inputType="text"
+            android:lines="1"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/ivSearchFieldCloseButton"
@@ -68,19 +68,24 @@
             android:visibility="gone" />
 
     </LinearLayout>
-    <FrameLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSongSearchList"
+        android:layout_height="match_parent">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <include
-            android:id="@+id/placeholderErrorLayout"
-            layout="@layout/placeholder_message_view"
-            android:visibility="gone" />
-    </FrameLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSongSearchList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/placeholderErrorLayout"
+                layout="@layout/placeholder_message_view"
+                android:visibility="gone" />
+        </FrameLayout>
+    </ScrollView>
 </LinearLayout>
