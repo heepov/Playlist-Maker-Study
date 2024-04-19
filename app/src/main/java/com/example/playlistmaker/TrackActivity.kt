@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.data.ItunesTrack
@@ -41,7 +40,9 @@ class TrackActivity : AppCompatActivity() {
         artistName.text = track.artistName
     }
 
-    // знаю что это ужасно, но зато очень по питоновскому)))
+    // знаю что это колхоз, но зато очень по питоновски )
+    // но так ка этот все я сделал для проверки работы нажатий на элементы списка, думаю что сойдет
+    // потом все равно удалю
     private fun convertToAppleMusicApiUrl(url: String, size: Int): String {
         val baseUrl = url.substringBeforeLast("/")
         val filename = url.substringAfterLast("/")

@@ -36,9 +36,9 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val service = retrofit.create(ItunesApi::class.java)
     private val tracks = ArrayList<ItunesTrack>()
-    private val adapter = TrackAdapter{
+    private val adapter = TrackAdapter {
         showTrackView(it)
-}
+    }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var inputEditText: EditText
@@ -65,8 +65,6 @@ class SearchActivity : AppCompatActivity() {
         placeholderErrorExtraMessage = findViewById<TextView>(R.id.tvPlaceholderExtraMessage)
         placeholderErrorRefreshButton = findViewById<Button>(R.id.btnPlaceholderErrorRefresh)
         placeholderErrorLayout = findViewById<LinearLayout>(R.id.placeholderErrorLayout)
-
-
 
         if (searchString != "")
             inputEditText.setText(searchString)
@@ -138,7 +136,7 @@ class SearchActivity : AppCompatActivity() {
 
                             else -> {
                                 placeHolderErrorProcessing(response.code())
-                                Log.d("SearchActivity", response.code().toString())
+                                Log.d("SearchActivity", "Response code: ${response.code()}")
                             }
                         }
 
@@ -146,7 +144,7 @@ class SearchActivity : AppCompatActivity() {
 
                     override fun onFailure(call: Call<ItunesTracksResponse>, t: Throwable) {
                         placeHolderErrorProcessing(-1)
-                        Log.d("SearchActivity", t.message.toString())
+                        Log.d("SearchActivity", "onFailure: ${t.message.toString()}")
                     }
 
                 })
@@ -156,7 +154,7 @@ class SearchActivity : AppCompatActivity() {
     private fun placeHolderErrorProcessing(
         responseCode: Int?,
     ) {
-        if ( responseCode == null ){
+        if (responseCode == null) {
             placeholderErrorLayout.visibility = View.GONE
             return
         }
@@ -172,6 +170,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderErrorMessage.setText(R.string.noFoundResults)
                 placeholderErrorImage.setImageResource(R.drawable.no_results_error)
             }
+
             else -> {
                 placeholderErrorExtraMessage.visibility = View.VISIBLE
                 placeholderErrorRefreshButton.visibility = View.VISIBLE
@@ -184,8 +183,12 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun showTrackView(track: ItunesTrack) {
-        startActivity(Intent(this, TrackActivity::class.java).putExtra("track", Gson().toJson(track)))
-//        Toast.makeText(this, "${track.trackName} ${track.artistName} ${track.trackTimeMillis}", Toast.LENGTH_SHORT).show()
+        startActivity(
+            Intent(this, TrackActivity::class.java).putExtra(
+                "track",
+                Gson().toJson(track)
+            )
+        )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

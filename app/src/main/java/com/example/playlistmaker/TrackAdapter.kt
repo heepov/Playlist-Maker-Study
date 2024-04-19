@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.data.ItunesTrack
 
-class TrackAdapter(val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
+class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
     var tracks = ArrayList<ItunesTrack>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackCardViewHolder {
         return TrackCardViewHolder(parent)
