@@ -56,6 +56,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
         recyclerView = findViewById<RecyclerView>(R.id.rvSongSearchList)
         inputEditText = findViewById<EditText>(R.id.etSearchField)
         clearButton = findViewById<ImageView>(R.id.ivSearchFieldCloseButton)
@@ -77,7 +79,6 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
             tracks.clear()
             adapter.notifyDataSetChanged()
@@ -85,6 +86,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         placeholderErrorRefreshButton.setOnClickListener {
+            manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
             search(searchString)
         }
         val simpleTextWatcher = object : TextWatcher {
