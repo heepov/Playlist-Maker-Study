@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,12 +13,14 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.data.ItunesApi
 import com.example.playlistmaker.data.ItunesTrack
 import com.example.playlistmaker.data.ItunesTracksResponse
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,12 +36,13 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val service = retrofit.create(ItunesApi::class.java)
     private val tracks = ArrayList<ItunesTrack>()
-    private val adapter = TrackAdapter()
+    private val adapter = TrackAdapter{
+        showTrackView(it)
+}
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var inputEditText: EditText
     private lateinit var clearButton: ImageView
-    private lateinit var backButton: ImageView
 
     private lateinit var placeholderErrorImage: ImageView
     private lateinit var placeholderErrorMessage: TextView
@@ -55,7 +59,6 @@ class SearchActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.rvSongSearchList)
         inputEditText = findViewById<EditText>(R.id.etSearchField)
         clearButton = findViewById<ImageView>(R.id.ivSearchFieldCloseButton)
-        backButton = findViewById<ImageView>(R.id.ivBack)
 
         placeholderErrorImage = findViewById<ImageView>(R.id.ivPlaceholderErrorImage)
         placeholderErrorMessage = findViewById<TextView>(R.id.tvPlaceholderMessage)
@@ -68,16 +71,16 @@ class SearchActivity : AppCompatActivity() {
         if (searchString != "")
             inputEditText.setText(searchString)
 
-        backButton.setOnClickListener {
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
             vibrate()
             finish()
         }
+
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
             val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
-            placeholderErrorLayout.visibility = View.GONE
             tracks.clear()
             adapter.notifyDataSetChanged()
             vibrate()
@@ -125,21 +128,25 @@ class SearchActivity : AppCompatActivity() {
                         when (response.code()) {
                             200 -> {
                                 if (!response.body()?.results.isNullOrEmpty()) {
-                                    Log.d("SearchActivity", "Size ${response.body()?.results!!.size}")
                                     tracks.clear()
                                     tracks.addAll(response.body()?.results!!)
                                     adapter.notifyDataSetChanged()
+                                    placeHolderErrorProcessing(null)
                                 } else
-                                    placeHolderErrorProcessing(response.code(), null)
+                                    placeHolderErrorProcessing(response.code())
                             }
 
-                            else -> placeHolderErrorProcessing(response.code(), null)
+                            else -> {
+                                placeHolderErrorProcessing(response.code())
+                                Log.d("SearchActivity", response.code().toString())
+                            }
                         }
 
                     }
 
                     override fun onFailure(call: Call<ItunesTracksResponse>, t: Throwable) {
-                        placeHolderErrorProcessing(-1, t.message.toString())
+                        placeHolderErrorProcessing(-1)
+                        Log.d("SearchActivity", t.message.toString())
                     }
 
                 })
@@ -147,9 +154,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun placeHolderErrorProcessing(
-        responseCode: Int,
-        errorMessage: String?
+        responseCode: Int?,
     ) {
+        if ( responseCode == null ){
+            placeholderErrorLayout.visibility = View.GONE
+            return
+        }
         tracks.clear()
         adapter.notifyDataSetChanged()
 
@@ -162,14 +172,6 @@ class SearchActivity : AppCompatActivity() {
                 placeholderErrorMessage.setText(R.string.noFoundResults)
                 placeholderErrorImage.setImageResource(R.drawable.no_results_error)
             }
-            -1 -> {
-                placeholderErrorMessage.setText(R.string.something_went_wrong)
-                placeholderErrorImage.setImageResource(R.drawable.no_results_error)
-                if (errorMessage!= null) {
-                    placeholderErrorExtraMessage.visibility = View.VISIBLE
-                    placeholderErrorExtraMessage.text = errorMessage
-                }
-            }
             else -> {
                 placeholderErrorExtraMessage.visibility = View.VISIBLE
                 placeholderErrorRefreshButton.visibility = View.VISIBLE
@@ -178,6 +180,12 @@ class SearchActivity : AppCompatActivity() {
                 placeholderErrorImage.setImageResource(R.drawable.server_error)
             }
         }
+    }
+
+
+    private fun showTrackView(track: ItunesTrack) {
+        startActivity(Intent(this, TrackActivity::class.java).putExtra("track", Gson().toJson(track)))
+//        Toast.makeText(this, "${track.trackName} ${track.artistName} ${track.trackTimeMillis}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

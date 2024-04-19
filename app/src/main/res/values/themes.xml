@@ -12,7 +12,10 @@
         <item name="tint">@color/grayDark</item>
     </style>
 
-    <style name="h1.theme">
+    <style name="h3.theme">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="h5.theme">
         <item name="android:textColor">@color/black</item>
     </style>
 
@@ -37,20 +40,20 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="p.songCard">
+    <style name="p.trackCard">
         <item name="android:textColor">@color/black</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
     </style>
-    <style name="p6.songCard">
+    <style name="p6.trackCard">
         <item name="android:textColor">@color/grayDark</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
     </style>
-    <style name="icon.songCard">
+    <style name="icon.trackCard">
         <item name="tint">@color/grayDark</item>
     </style>
-    <style name="separator.songCard">
+    <style name="separator.trackCard">
         <item name="tint">@color/grayDark</item>
     </style>
 

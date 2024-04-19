@@ -44,7 +44,7 @@
     <style name="separator"/>
 
 
-    <style name="h1">
+    <style name="h3">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/h3TextSize</item>
     </style>
@@ -52,6 +52,11 @@
     <style name="h4">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/h4TextSize</item>
+    </style>
+
+    <style name="h5">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h5TextSize</item>
     </style>
 
     <style name="p">

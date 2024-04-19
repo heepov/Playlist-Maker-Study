@@ -8,7 +8,7 @@
     tools:context=".SearchActivity">
 
     <TextView
-        style="@style/h1.theme"
+        style="@style/h3.theme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

@@ -1,0 +1,51 @@
+package com.example.playlistmaker
+
+import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.example.playlistmaker.data.ItunesTrack
+import com.google.gson.Gson
+
+class TrackActivity : AppCompatActivity() {
+    private val gson = Gson()
+    private lateinit var trackCover: ImageView
+    private lateinit var trackTitle: TextView
+    private lateinit var artistName: TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_track)
+
+        val track = gson.fromJson(intent.getStringExtra("track"), ItunesTrack::class.java)
+
+        trackCover = findViewById(R.id.ivTrackCover)
+        trackTitle = findViewById(R.id.tvTrackTitle)
+        artistName = findViewById(R.id.tvArtistName)
+
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+            vibrate()
+            finish()
+        }
+
+        Glide.with(applicationContext)
+            .load(convertToAppleMusicApiUrl(track.coverUrl, 600))
+            .placeholder(R.drawable.placeholder)
+            .centerCrop()
+            .into(trackCover)
+
+        trackTitle.text = track.trackName
+        artistName.text = track.artistName
+    }
+
+    // знаю что это ужасно, но зато очень по питоновскому)))
+    private fun convertToAppleMusicApiUrl(url: String, size: Int): String {
+        val baseUrl = url.substringBeforeLast("/")
+        val filename = url.substringAfterLast("/")
+        val newFilename = filename.replace("100x100bb", "${size}x${size}")
+        return "$baseUrl/$newFilename"
+    }
+}
