@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.data.ItunesTrack
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
     var tracks = ArrayList<ItunesTrack>()
@@ -41,15 +43,8 @@ class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView
                 .into(trackCover)
             trackTitle.text = model.trackName
             artistName.text = model.artistName
-            trackDuration.text = formatDuration(model.trackTimeMillis)
+            trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
         }
-
-        private fun formatDuration(duration: Long): String {
-            val seconds = duration / 1000
-            return if (seconds % 60 > 9)
-                "${seconds / 60}:${seconds % 60}"
-            else
-                "${seconds / 60}:0${seconds % 60}"
-        }
+        
     }
 }

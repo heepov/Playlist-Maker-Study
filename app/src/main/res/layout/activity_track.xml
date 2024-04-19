@@ -25,20 +25,20 @@
         android:adjustViewBounds="true"
         android:layout_gravity="center"
         android:layout_marginTop="46dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="@dimen/bigMarginPaddingSize"
+        android:layout_marginHorizontal="@dimen/bigMarginPaddingSize"
         android:src="@drawable/placeholder" />
 
  <TextView
      android:id="@+id/tvArtistName"
-     android:layout_marginBottom="12dp"
+     android:layout_marginBottom="@dimen/secondaryMarginPaddingSize"
      android:text="Yesterday (Remastered 2009)"
      android:layout_width="match_parent"
      android:singleLine="true"
      android:ellipsize = "end"
      style="@style/h3.theme"
      android:layout_height="wrap_content"
-     android:layout_marginHorizontal="24dp"/>
+     android:layout_marginHorizontal="@dimen/bigMarginPaddingSize"/>
     <TextView
         android:id="@+id/tvTrackTitle"
         android:text="The Beatles"
@@ -47,6 +47,6 @@
         android:ellipsize = "end"
         style="@style/h5.theme"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"/>
+        android:layout_marginHorizontal="@dimen/bigMarginPaddingSize"/>
 
 </LinearLayout>
