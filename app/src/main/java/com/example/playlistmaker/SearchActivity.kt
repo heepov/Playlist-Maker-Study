@@ -13,13 +13,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.data.ItunesApi
-import com.example.playlistmaker.data.ItunesTrack
-import com.example.playlistmaker.data.ItunesTracksResponse
+import com.example.playlistmaker.data.Track
+import com.example.playlistmaker.data.TracksList
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val service = retrofit.create(ItunesApi::class.java)
-    private val tracks = ArrayList<ItunesTrack>()
+    private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
         showTrackView(it)
     }
@@ -82,6 +81,7 @@ class SearchActivity : AppCompatActivity() {
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
             tracks.clear()
             adapter.notifyDataSetChanged()
+            placeHolderErrorProcessing(null)
             vibrate()
         }
 
@@ -120,10 +120,10 @@ class SearchActivity : AppCompatActivity() {
     private fun search(queryInput: String) {
         if (queryInput.trim().isNotEmpty()) {
             service.search(queryInput)
-                .enqueue(object : Callback<ItunesTracksResponse> {
+                .enqueue(object : Callback<TracksList> {
                     override fun onResponse(
-                        call: Call<ItunesTracksResponse>,
-                        response: Response<ItunesTracksResponse>
+                        call: Call<TracksList>,
+                        response: Response<TracksList>
                     ) {
                         when (response.code()) {
                             200 -> {
@@ -144,7 +144,7 @@ class SearchActivity : AppCompatActivity() {
 
                     }
 
-                    override fun onFailure(call: Call<ItunesTracksResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<TracksList>, t: Throwable) {
                         placeHolderErrorProcessing(-1)
                         Log.d("SearchActivity", "onFailure: ${t.message.toString()}")
                     }
@@ -184,7 +184,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    private fun showTrackView(track: ItunesTrack) {
+    private fun showTrackView(track: Track) {
         startActivity(
             Intent(this, TrackActivity::class.java).putExtra(
                 "track",

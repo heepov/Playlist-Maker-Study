@@ -1,12 +1,11 @@
 package com.example.playlistmaker
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.playlistmaker.data.ItunesTrack
+import com.example.playlistmaker.data.Track
 import com.google.gson.Gson
 
 class TrackActivity : AppCompatActivity() {
@@ -19,7 +18,7 @@ class TrackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track)
 
-        val track = gson.fromJson(intent.getStringExtra("track"), ItunesTrack::class.java)
+        val track = gson.fromJson(intent.getStringExtra("track"), Track::class.java)
 
         trackCover = findViewById(R.id.ivTrackCover)
         trackTitle = findViewById(R.id.tvTrackTitle)

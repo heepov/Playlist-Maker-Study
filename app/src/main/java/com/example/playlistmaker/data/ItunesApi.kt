@@ -11,5 +11,5 @@ interface ItunesApi {
         @Query("media") media: String = "music",
         @Query("entity") entity:String = "song",
 //        @Query("limit") limit:Int = 200,
-    ) : Call<ItunesTracksResponse>
+    ) : Call<TracksList>
 }

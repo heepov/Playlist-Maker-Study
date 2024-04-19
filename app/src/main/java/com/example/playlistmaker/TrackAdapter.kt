@@ -6,12 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.playlistmaker.data.ItunesTrack
+import com.example.playlistmaker.data.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView.Adapter<TrackAdapter.TrackCardViewHolder>() {
-    var tracks = ArrayList<ItunesTrack>()
+    var tracks = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackCardViewHolder {
         return TrackCardViewHolder(parent)
     }
@@ -24,7 +24,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView
     override fun getItemCount() = tracks.size
 
     fun interface TrackClickListener {
-        fun onTrackClick(track: ItunesTrack)
+        fun onTrackClick(track: Track)
     }
 
     class TrackCardViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
@@ -35,7 +35,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView
         private val artistName: TextView = itemView.findViewById(R.id.tvArtistName)
         private val trackDuration: TextView = itemView.findViewById(R.id.tvTrackDuration)
 
-        fun bind(model: ItunesTrack) {
+        fun bind(model: Track) {
             Glide.with(itemView)
                 .load(model.coverUrl)
                 .placeholder(R.drawable.placeholder)
@@ -45,6 +45,6 @@ class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView
             artistName.text = model.artistName
             trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
         }
-        
+
     }
 }
