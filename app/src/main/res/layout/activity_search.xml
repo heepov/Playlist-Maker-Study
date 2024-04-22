@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -22,7 +23,7 @@
             android:src="@drawable/ic_arrow_back" />
 
         <TextView
-            style="@style/h1.theme"
+            style="@style/h3.theme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -52,8 +53,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
-            android:lines="1" />
+            android:lines="1"
+            android:singleLine="true" />
 
         <ImageView
             android:id="@+id/ivSearchFieldCloseButton"
@@ -65,14 +68,24 @@
             android:visibility="gone" />
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSongSearchList"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSongSearchList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                android:id="@+id/placeholderErrorLayout"
+                layout="@layout/placeholder_message_view"
+                android:visibility="gone" />
+        </FrameLayout>
+    </ScrollView>
 </LinearLayout>

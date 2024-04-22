@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="88dp"
+    android:theme="@style/Theme.PlaylistMaker.theme">
+
+    <ImageView
+        android:id="@+id/ivPlaceholderErrorImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/server_error" />
+
+    <TextView
+        android:id="@+id/tvPlaceholderMessage"
+        style="@style/h4.textErrorPlaceholder.theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="22dp"
+        android:text="@string/connectionProblem"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvPlaceholderExtraMessage"
+        style="@style/h4.textErrorPlaceholder.theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingBottom="24dp"
+        android:text="@string/uploadFailed"
+        android:textAlignment="center"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnPlaceholderErrorRefresh"
+        style="@style/btn.buttonErrorPlaceholder.theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/refresh"
+        android:visibility="gone" />
+</LinearLayout>

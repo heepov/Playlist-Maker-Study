@@ -44,9 +44,19 @@
     <style name="separator"/>
 
 
-    <style name="h1">
+    <style name="h3">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/h3TextSize</item>
+    </style>
+
+    <style name="h4">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h4TextSize</item>
+    </style>
+
+    <style name="h5">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h5TextSize</item>
     </style>
 
     <style name="p">
@@ -90,4 +100,16 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+    <style name="btn.buttonErrorPlaceholder">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="cornerRadius">@dimen/largeCornerRadius</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/h5TextSize</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="android:paddingVertical">10dp</item>
+    </style>
+    <style name="h4.textErrorPlaceholder"/>
+
 </resources>

@@ -1,48 +1,94 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.data.ItunesApi
+import com.example.playlistmaker.data.Track
+import com.example.playlistmaker.data.TracksList
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
+    private val itunesBaseUrl = "https://itunes.apple.com"
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(itunesBaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val service = retrofit.create(ItunesApi::class.java)
+    private val tracks = ArrayList<Track>()
+    private val adapter = TrackAdapter {
+        showTrackView(it)
+    }
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var inputEditText: EditText
+    private lateinit var clearButton: ImageView
+
+    private lateinit var placeholderErrorImage: ImageView
+    private lateinit var placeholderErrorMessage: TextView
+    private lateinit var placeholderErrorExtraMessage: TextView
+    private lateinit var placeholderErrorRefreshButton: Button
+    private lateinit var placeholderErrorLayout: LinearLayout
+
+
     private var searchString: String = SEARCH_STRING_DEF
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val inputEditText = findViewById<EditText>(R.id.etSearchField)
+        val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+        recyclerView = findViewById<RecyclerView>(R.id.rvSongSearchList)
+        inputEditText = findViewById<EditText>(R.id.etSearchField)
+        clearButton = findViewById<ImageView>(R.id.ivSearchFieldCloseButton)
+
+        placeholderErrorImage = findViewById<ImageView>(R.id.ivPlaceholderErrorImage)
+        placeholderErrorMessage = findViewById<TextView>(R.id.tvPlaceholderMessage)
+        placeholderErrorExtraMessage = findViewById<TextView>(R.id.tvPlaceholderExtraMessage)
+        placeholderErrorRefreshButton = findViewById<Button>(R.id.btnPlaceholderErrorRefresh)
+        placeholderErrorLayout = findViewById<LinearLayout>(R.id.placeholderErrorLayout)
+
         if (searchString != "")
             inputEditText.setText(searchString)
-
-// Не очень понял зачем нам переопределять onRestoreInstanceState если можно напрямую получить данные
-//        if (savedInstanceState != null) {
-//            inputEditText.setText(
-//                savedInstanceState.getString(SEARCH_STRING_KEY, SEARCH_STRING_DEF)
-//            )
-//        }
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener {
             vibrate()
             finish()
         }
-        val clearButton = findViewById<ImageView>(R.id.ivSearchFieldCloseButton)
+
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+            tracks.clear()
+            adapter.notifyDataSetChanged()
+            placeHolderErrorProcessing(null)
             vibrate()
         }
 
-
+        placeholderErrorRefreshButton.setOnClickListener {
+            manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+            search(searchString)
+        }
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -53,22 +99,98 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 searchString = s.toString()
+//                search(searchString) // мне кажется такое поведение поисковой строки более привычное
             }
 
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
-        val recyclerView = findViewById<RecyclerView>(R.id.rvSongSearchList)
-        recyclerView.adapter = TrackAdapter(
-            songs = List(5) {
-                TrackCard(
-                    imageUrl = songsImages[it],
-                    title = songsTitles[it],
-                    artist = songsArtists[it],
-                    duration = songsDuration[it]
-                )
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search(searchString)
             }
-        )
+            false
+        }
+        inputEditText.addTextChangedListener(simpleTextWatcher)
+
+
+        adapter.tracks = tracks
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = adapter
+    }
+
+    private fun search(queryInput: String) {
+        if (queryInput.trim().isNotEmpty()) {
+            service.search(queryInput)
+                .enqueue(object : Callback<TracksList> {
+                    override fun onResponse(
+                        call: Call<TracksList>,
+                        response: Response<TracksList>
+                    ) {
+                        when (response.code()) {
+                            200 -> {
+                                if (!response.body()?.results.isNullOrEmpty()) {
+                                    tracks.clear()
+                                    tracks.addAll(response.body()?.results!!)
+                                    adapter.notifyDataSetChanged()
+                                    placeHolderErrorProcessing(null)
+                                } else
+                                    placeHolderErrorProcessing(response.code())
+                            }
+
+                            else -> {
+                                placeHolderErrorProcessing(response.code())
+                                Log.d("SearchActivity", "Response code: ${response.code()}")
+                            }
+                        }
+
+                    }
+
+                    override fun onFailure(call: Call<TracksList>, t: Throwable) {
+                        placeHolderErrorProcessing(-1)
+                        Log.d("SearchActivity", "onFailure: ${t.message.toString()}")
+                    }
+
+                })
+        }
+    }
+
+    private fun placeHolderErrorProcessing(
+        responseCode: Int?,
+    ) {
+        if (responseCode == null) {
+            placeholderErrorLayout.visibility = View.GONE
+            return
+        }
+        tracks.clear()
+        adapter.notifyDataSetChanged()
+
+        placeholderErrorLayout.visibility = View.VISIBLE
+        when (responseCode) {
+            200 -> {
+                placeholderErrorExtraMessage.visibility = View.GONE
+                placeholderErrorRefreshButton.visibility = View.GONE
+
+                placeholderErrorMessage.setText(R.string.noFoundResults)
+                placeholderErrorImage.setImageResource(R.drawable.no_results_error)
+            }
+
+            else -> {
+                placeholderErrorExtraMessage.visibility = View.VISIBLE
+                placeholderErrorRefreshButton.visibility = View.VISIBLE
+                placeholderErrorMessage.setText(R.string.connectionProblem)
+                placeholderErrorExtraMessage.setText(R.string.uploadFailed)
+                placeholderErrorImage.setImageResource(R.drawable.server_error)
+            }
+        }
+    }
+
+
+    private fun showTrackView(track: Track) {
+        startActivity(
+            Intent(this, TrackActivity::class.java).putExtra(
+                "track",
+                Gson().toJson(track)
+            )
+        )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -92,22 +214,5 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
         const val SEARCH_STRING_DEF = ""
-        val songsTitles = arrayOf(
-            "Smells Like Teen Spirit",
-            "Billie Jean",
-            "Stayin' Alive",
-            "Whole Lotta Love",
-            "Sweet Child O'Mine"
-        )
-        val songsArtists =
-            arrayOf("Nirvana", "Michael Jackson", "Bee Gees", "Led Zeppelin", "Guns N' Roses")
-        val songsImages = arrayOf(
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        )
-        val songsDuration = arrayOf(301000L, 275000L, 250000L, 333000L, 303000L)
     }
 }

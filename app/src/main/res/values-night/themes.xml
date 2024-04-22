@@ -12,8 +12,10 @@
         <item name="tint">@color/white</item>
     </style>
 
-    <style name="h1.theme">
-        <item name="fontFamily">@font/ys_display_medium</item>
+    <style name="h3.theme">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="h5.theme">
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -36,23 +38,31 @@
         <item name="android:textColorHint">@color/black</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    <style name="p.songCard">
+    <style name="p.trackCard">
         <item name="android:textColor">@color/white</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
     </style>
-    <style name="p6.songCard">
+    <style name="p6.trackCard">
         <item name="android:textColor">@color/white</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
     </style>
-    <style name="icon.songCard">
+    <style name="icon.trackCard">
         <item name="tint">@color/white</item>
     </style>
-    <style name="separator.songCard">
+    <style name="separator.trackCard">
         <item name="tint">@color/white</item>
     </style>
     <style name="searchFieldIcon.theme">
         <item name="tint">@color/black</item>
+    </style>
+
+    <style name="btn.buttonErrorPlaceholder.theme">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="h4.textErrorPlaceholder.theme">
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

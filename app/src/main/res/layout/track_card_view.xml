@@ -16,11 +16,11 @@
         android:paddingVertical="@dimen/smallMarginPaddingSize">
 
         <ImageView
-            android:id="@+id/iwSongImage"
+            android:id="@+id/ivTrackCover"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
-            android:background="@drawable/song_image_bg"
+            android:background="@drawable/track_image_bg"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder" />
@@ -34,8 +34,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/twSongTitle"
-                style="@style/p.songCard"
+                android:id="@+id/tvTrackTitle"
+                style="@style/p.trackCard"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yesterday (Remastered 2009)" />
@@ -46,32 +47,35 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/twArtistName"
-                    style="@style/p6.songCard"
-                    android:layout_width="0dp"
+                    android:id="@+id/tvArtistName"
+                    style="@style/p6.trackCard"
+                    android:singleLine="true"
                     android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:text="The Beatles" />
 
-                <ImageView
-                    style="@style/separator.songCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_circle_separator" />
 
-                <TextView
-                    android:id="@+id/twSongDuration"
-                    style="@style/p6.songCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2:55" />
+                    <ImageView
+                        style="@style/separator.trackCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_circle_separator" />
+
+                    <TextView
+                        android:id="@+id/tvTrackDuration"
+                        style="@style/p6.trackCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="2:55" />
             </LinearLayout>
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/arrow_go_song"
-            style="@style/icon.songCard"
+            android:id="@+id/ivTrackInArrow"
+            style="@style/icon.trackCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
