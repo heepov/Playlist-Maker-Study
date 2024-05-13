@@ -17,4 +17,6 @@
     <string name="uploadFailed">Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="refresh">Обновить</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="you_found">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>

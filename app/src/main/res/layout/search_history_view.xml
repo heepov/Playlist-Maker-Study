@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/bigMarginPaddingSize"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/h4.textErrorPlaceholder.theme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/you_found"
+                android:textAlignment="center" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSearchHistoryList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/bigMarginPaddingSize" />
+
+            <Button
+                android:id="@+id/btnClearSearchHistory"
+                style="@style/btn.buttonErrorPlaceholder.theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/bigMarginPaddingSize"
+                android:text="@string/clear_history" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

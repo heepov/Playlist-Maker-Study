@@ -15,4 +15,6 @@
     <string name="uploadFailed">Upload failed. Check your internet connection</string>
     <string name="refresh">Refresh</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="you_found">You found</string>
+    <string name="clear_history">Clear history</string>
 </resources>

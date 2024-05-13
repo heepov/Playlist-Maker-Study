@@ -37,16 +37,21 @@
     <FrameLayout
         style="@style/settingsItem"
         android:layout_marginTop="40dp">
-
+        <!--        <com.google.android.material.switchmaterial.SwitchMaterial-->
+        <!--            android:id="@+id/swTheme"-->
+        <!--            android:text="Темная тема"-->
+        <!--            android:layout_gravity="start"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"/>-->
         <TextView
             style="@style/p.theme.settingsStartItem"
             android:text="@string/darkTheme" />
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/swTheme"
             style="@style/icon.settingsEndItem.theme"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="24dp" />
     </FrameLayout>
 
     <FrameLayout style="@style/settingsItem">
