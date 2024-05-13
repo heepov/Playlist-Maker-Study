@@ -34,7 +34,7 @@ class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView
         private val trackTitle: TextView = itemView.findViewById(R.id.tvTrackTitle)
         private val artistName: TextView = itemView.findViewById(R.id.tvArtistName)
         private val trackDuration: TextView = itemView.findViewById(R.id.tvTrackDuration)
-
+        private val llTrackSubTitleContainer: ViewGroup = itemView.findViewById(R.id.llTrackSubTitleContainer)
         fun bind(model: Track) {
             Glide.with(itemView)
                 .load(model.coverUrl)
@@ -44,6 +44,8 @@ class TrackAdapter(private val clickListener: TrackClickListener) : RecyclerView
             trackTitle.text = model.trackName
             artistName.text = model.artistName
             trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
+            llTrackSubTitleContainer.requestLayout()
+            itemView.requestLayout()
         }
 
     }

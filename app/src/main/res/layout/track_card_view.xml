@@ -42,6 +42,7 @@
                 android:text="Yesterday (Remastered 2009)" />
 
             <LinearLayout
+                android:id="@+id/llTrackSubTitleContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -51,25 +52,25 @@
                     style="@style/p6.trackCard"
                     android:singleLine="true"
                     android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:text="The Beatles" />
 
 
-                    <ImageView
-                        style="@style/separator.trackCard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_circle_separator" />
+                <ImageView
+                    style="@style/separator.trackCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_circle_separator" />
 
-                    <TextView
-                        android:id="@+id/tvTrackDuration"
-                        style="@style/p6.trackCard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:text="2:55" />
+                <TextView
+                    android:id="@+id/tvTrackDuration"
+                    style="@style/p6.trackCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="2:55" />
             </LinearLayout>
         </LinearLayout>
 
