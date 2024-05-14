@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatDelegate
 const val SETTINGS_PREFERENCE = "settings_preference"
 const val THEME_SWITCHER_KEY = "theme_switcher_key"
 
+const val HISTORY_PREFERENCE = "history_preference"
+const val TRACKS_KEY = "tracks_key"
+
 class App : Application() {
     private var dakTheme = false
     override fun onCreate() {

@@ -25,8 +25,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val HISTORY_PREFERENCE = "history_preference"
-const val TRACKS_KEY = "tracks_key"
 
 class SearchActivity : AppCompatActivity() {
     private val itunesBaseUrl = "https://itunes.apple.com"
@@ -35,6 +33,7 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val service = retrofit.create(ItunesApi::class.java)
+
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
         addTrackToHistory(it)
@@ -245,6 +244,7 @@ class SearchActivity : AppCompatActivity() {
         updateSearchHistoryList()
         vibrate()
     }
+
     private fun updateSearchHistoryList() {
         searchHistoryList.clear()
         searchHistoryList.addAll(
