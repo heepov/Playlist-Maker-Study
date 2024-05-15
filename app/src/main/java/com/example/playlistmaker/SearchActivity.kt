@@ -52,7 +52,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchHistoryList = ArrayList<Track>()
     private val searchHistoryAdapter = TrackAdapter {
-        removeTrackFromHistory(it)
+//        removeTrackFromHistory(it)
     }
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
@@ -236,11 +236,11 @@ class SearchActivity : AppCompatActivity() {
         vibrate()
     }
 
-    private fun removeTrackFromHistory(track: Track) {
-        SearchHistory(getSharedPreferences(HISTORY_PREFERENCE, MODE_PRIVATE)).deleteTrack(track)
-        updateSearchHistoryList()
-        vibrate()
-    }
+//    private fun removeTrackFromHistory(track: Track) {
+//        SearchHistory(getSharedPreferences(HISTORY_PREFERENCE, MODE_PRIVATE)).deleteTrack(track)
+//        updateSearchHistoryList()
+//        vibrate()
+//    }
 
     private fun updateSearchHistoryList() {
         searchHistoryList.clear()

@@ -23,12 +23,12 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
             putString(TRACKS_KEY, createJsonFromTrackList(tackList))
         }
     }
-    fun deleteTrack(track: Track) {
-        tackList.remove(track)
-        sharedPreferences.edit {
-            putString(TRACKS_KEY, createJsonFromTrackList(tackList))
-        }
-    }
+//    fun deleteTrack(track: Track) {
+//        tackList.remove(track)
+//        sharedPreferences.edit {
+//            putString(TRACKS_KEY, createJsonFromTrackList(tackList))
+//        }
+//    }
 
     fun clearTrackList(){
         tackList.clear()
