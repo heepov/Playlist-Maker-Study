@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.edit
 import com.example.playlistmaker.data.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,16 +19,22 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
     fun addTrack(track: Track) {
         checkExistAndAddTrack(track)
         checkAndCutTrackList()
-        sharedPreferences.edit().putString(TRACKS_KEY, createJsonFromTrackList(tackList)).apply()
+        sharedPreferences.edit {
+            putString(TRACKS_KEY, createJsonFromTrackList(tackList))
+        }
     }
     fun deleteTrack(track: Track) {
         tackList.remove(track)
-        sharedPreferences.edit().putString(TRACKS_KEY, createJsonFromTrackList(tackList)).apply()
+        sharedPreferences.edit {
+            putString(TRACKS_KEY, createJsonFromTrackList(tackList))
+        }
     }
 
     fun clearTrackList(){
         tackList.clear()
-        sharedPreferences.edit().putString(TRACKS_KEY, null).apply()
+        sharedPreferences.edit {
+            putString(TRACKS_KEY, null)
+        }
     }
 
     fun getTrackList(): ArrayList<Track> {

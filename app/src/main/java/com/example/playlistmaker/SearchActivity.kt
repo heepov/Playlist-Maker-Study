@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.data.ItunesApi
@@ -87,16 +88,14 @@ class SearchActivity : AppCompatActivity() {
                 )
             ).getTrackList()
         )
-        searchHistoryLayout.visibility =
-            if (searchHistoryList.isNotEmpty())
-                View.VISIBLE else View.GONE
+        searchHistoryVisibility()
 
         searchHistoryAdapter.tracks = searchHistoryList
         searchHistoryRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         searchHistoryRecyclerView.adapter = searchHistoryAdapter
 
-        if (searchString != "")
+        if (searchString.isNotEmpty())
             searchField.setText(searchString)
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener {
@@ -126,23 +125,19 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchField.setOnFocusChangeListener { view, hasFocus ->
-            searchHistoryLayout.visibility =
-                if (hasFocus && searchField.text.isEmpty() && searchHistoryList.isNotEmpty())
-                    View.VISIBLE else View.GONE
+            searchHistoryVisibility(hasFocus)
         }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                searchHistoryLayout.visibility =
-                    if (searchField.hasFocus() && searchHistoryList.isNotEmpty() && s?.isEmpty() == true)
-                        View.VISIBLE else View.GONE
+                searchHistoryVisibility(searchField.hasFocus() && s?.isEmpty() == true)
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
-                searchHistoryLayout.visibility =
-                    if (searchField.hasFocus() && searchHistoryList.isNotEmpty() && s?.isEmpty() == true)
-                        View.VISIBLE else View.GONE
+                searchHistoryVisibility(searchField.hasFocus() && s?.isEmpty() == true)
+                if (s?.isEmpty() == true)
+                    tracks.clear()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -256,9 +251,7 @@ class SearchActivity : AppCompatActivity() {
             ).getTrackList()
         )
         searchHistoryAdapter.notifyDataSetChanged()
-        searchHistoryLayout.visibility =
-            if (searchField.hasFocus() && searchHistoryList.isNotEmpty() && searchField.text.isEmpty())
-                View.VISIBLE else View.GONE
+        searchHistoryVisibility()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -277,6 +270,9 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+    private fun searchHistoryVisibility(condition: Boolean = true){
+        searchHistoryLayout.isVisible = condition && searchHistoryList.isNotEmpty() && searchField.text.isEmpty()
     }
 
     companion object {
