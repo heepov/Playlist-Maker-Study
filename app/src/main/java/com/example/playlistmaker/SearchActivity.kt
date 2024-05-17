@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.data.ItunesApi
 import com.example.playlistmaker.data.Track
 import com.example.playlistmaker.data.TracksList
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +40,7 @@ class SearchActivity : AppCompatActivity() {
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter {
         addTrackToHistory(it)
+        showTrackView(it)
     }
 
     private lateinit var recyclerViewSearch: RecyclerView
@@ -52,6 +55,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchHistoryList = ArrayList<Track>()
     private val searchHistoryAdapter = TrackAdapter {
+        showTrackView(it)
     }
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
@@ -235,11 +239,14 @@ class SearchActivity : AppCompatActivity() {
         vibrate()
     }
 
-//    private fun removeTrackFromHistory(track: Track) {
-//        SearchHistory(getSharedPreferences(HISTORY_PREFERENCE, MODE_PRIVATE)).deleteTrack(track)
-//        updateSearchHistoryList()
-//        vibrate()
-//    }
+    private fun showTrackView(track: Track) {
+        startActivity(
+            Intent(this, TrackActivity::class.java).putExtra(
+                "track",
+                Gson().toJson(track)
+            )
+        )
+    }
 
     private fun updateSearchHistoryList() {
         searchHistoryList.clear()

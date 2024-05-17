@@ -49,6 +49,7 @@
         <item name="android:textSize">@dimen/h3TextSize</item>
     </style>
 
+
     <style name="h4">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/h4TextSize</item>
@@ -59,11 +60,25 @@
         <item name="android:textSize">@dimen/h5TextSize</item>
     </style>
 
+    <style name="h6">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h6TextSize</item>
+    </style>
+
     <style name="p">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/p2TextSize</item>
     </style>
+
+
+    <style name="p4">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">@dimen/p4TextSize</item>
+        <item name="android:textColor">@color/grayDark</item>
+    </style>
+
     <style name="p6">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textStyle">normal</item>

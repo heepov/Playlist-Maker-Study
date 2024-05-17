@@ -4,25 +4,53 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.data.Track
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
     private val gson = Gson()
     private lateinit var trackCover: ImageView
     private lateinit var trackTitle: TextView
     private lateinit var artistName: TextView
+    private lateinit var trackDuration: TextView
+
+    private lateinit var trackDurationText: TextView
+    private lateinit var trackAlbumText: TextView
+    private lateinit var trackYearText: TextView
+    private lateinit var trackGenreText: TextView
+    private lateinit var trackCountryText: TextView
+
+    private lateinit var trackDurationValue: TextView
+    private lateinit var trackAlbumValue: TextView
+    private lateinit var trackYearValue: TextView
+    private lateinit var trackGenreValue: TextView
+    private lateinit var trackCountryValue: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track)
-
         val track = gson.fromJson(intent.getStringExtra("track"), Track::class.java)
 
         trackCover = findViewById(R.id.ivTrackCover)
         trackTitle = findViewById(R.id.tvTrackTitle)
         artistName = findViewById(R.id.tvArtistName)
+        trackDuration = findViewById(R.id.tvTrackDuration)
+
+        trackDurationText = findViewById(R.id.tvTrackDurationText)
+        trackAlbumText = findViewById(R.id.tvTrackAlbumText)
+        trackYearText = findViewById(R.id.tvTrackYearText)
+        trackGenreText = findViewById(R.id.tvTrackGenreText)
+        trackCountryText = findViewById(R.id.tvTrackCountryText)
+
+        trackDurationValue = findViewById(R.id.tvTrackDurationValue)
+        trackAlbumValue = findViewById(R.id.tvTrackAlbumValue)
+        trackYearValue = findViewById(R.id.tvTrackYearValue)
+        trackGenreValue = findViewById(R.id.tvTrackGenreValue)
+        trackCountryValue = findViewById(R.id.tvTrackCountryValue)
 
         findViewById<ImageView>(R.id.ivBack).setOnClickListener {
             vibrate()
@@ -30,22 +58,29 @@ class TrackActivity : AppCompatActivity() {
         }
 
         Glide.with(applicationContext)
-            .load(convertToAppleMusicApiUrl(track.coverUrl, 600))
+            .load(track.coverUrl.replaceAfterLast('/',"512x512bb.jpg"))
             .placeholder(R.drawable.placeholder)
             .centerCrop()
             .into(trackCover)
 
         trackTitle.text = track.trackName
         artistName.text = track.artistName
+        trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        trackDurationValue.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+
+        testFun(track.collectionName, trackAlbumText, trackAlbumValue)
+        testFun(track.releaseDate.substring(0, 4), trackYearText, trackYearValue)
+        testFun(track.primaryGenreName, trackGenreText, trackGenreValue)
+        testFun(track.country, trackCountryText, trackCountryValue)
+
+    }
+    private fun testFun(str: String, itemViewText: TextView, itemViewValue: TextView) {
+        if (str.isNotEmpty()) {
+            itemViewValue.text = str
+        }else{
+            itemViewText.isVisible = false
+            itemViewValue.isVisible = false
+        }
     }
 
-    // знаю что это колхоз, но зато очень по питоновски )
-    // но так ка этот все я сделал для проверки работы нажатий на элементы списка, думаю что сойдет
-    // потом все равно удалю
-    private fun convertToAppleMusicApiUrl(url: String, size: Int): String {
-        val baseUrl = url.substringBeforeLast("/")
-        val filename = url.substringAfterLast("/")
-        val newFilename = filename.replace("100x100bb", "${size}x${size}")
-        return "$baseUrl/$newFilename"
-    }
 }
