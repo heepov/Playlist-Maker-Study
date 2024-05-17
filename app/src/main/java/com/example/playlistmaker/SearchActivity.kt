@@ -52,7 +52,6 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchHistoryList = ArrayList<Track>()
     private val searchHistoryAdapter = TrackAdapter {
-//        removeTrackFromHistory(it)
     }
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
