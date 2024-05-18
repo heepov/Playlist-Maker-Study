@@ -194,14 +194,9 @@ val countries = listOf(
 )
 
 fun getCountryName(alpha:String):String{
-    when(alpha.length){
-        2 ->{
-            return countries.find { it.alpha2 == alpha }?.name?: ""
-        }
-        3 ->{
-            return countries.find { it.alpha3 == alpha }?.name?: ""
-        }
+    return when(alpha.length){
+        2 -> countries.find { it.alpha2 == alpha }?.name?: ""
+        3 -> countries.find { it.alpha3 == alpha }?.name?: ""
         else -> ""
     }
-    return ""
 }
