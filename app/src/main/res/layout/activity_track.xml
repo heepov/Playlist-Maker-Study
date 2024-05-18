@@ -1,14 +1,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:scrollbars="none"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:scrollbars="none">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:paddingBottom="42dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="42dp">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/glLeft24"
@@ -42,15 +42,13 @@
             app:layout_constraintGuide_end="@dimen/primaryMarginPaddingSize"
             app:layout_constraintStart_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/ivBack"
-            style="@style/icon.btnBack.theme"
-            android:layout_width="wrap_content"
+        <android.widget.Toolbar
+            android:id="@+id/toolBar"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/primaryMarginPaddingSize"
-            android:layout_marginTop="@dimen/primaryMarginPaddingSize"
-            android:src="@drawable/ic_arrow_back"
+            android:navigationIcon="@drawable/ic_arrow_back"
+            android:titleTextAppearance="@style/customToolbar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,12 +56,12 @@
             android:id="@+id/ivTrackCover"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="@dimen/largeMarginPaddingSize"
             android:src="@drawable/placeholder"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/glRight24"
             app:layout_constraintStart_toStartOf="@+id/glLeft24"
-            app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+            app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
         <TextView
             android:id="@+id/tvTrackTitle"

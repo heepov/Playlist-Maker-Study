@@ -13,7 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -101,7 +101,7 @@ class SearchActivity : AppCompatActivity() {
         if (searchString.isNotEmpty())
             searchField.setText(searchString)
 
-        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+        findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
             vibrate()
             finish()
         }
@@ -139,8 +139,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 searchHistoryVisibility(searchField.hasFocus() && s?.isEmpty() == true)
-                // добавил вот такое условие, чтобы при удалении запроса поиска НЕ через кнопку очистить (крестик)
-                // и заново не начав писать запрос поиска, чтобы до нажатия применить старый список не появлялся на экране
+
                 if (s?.isEmpty() == true)
                     tracks.clear()
             }

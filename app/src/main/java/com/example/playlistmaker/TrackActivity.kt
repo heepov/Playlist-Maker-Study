@@ -3,16 +3,19 @@ package com.example.playlistmaker
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.data.Track
+import com.example.playlistmaker.data.getCountryName
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
     private val gson = Gson()
+
     private lateinit var trackCover: ImageView
     private lateinit var trackTitle: TextView
     private lateinit var artistName: TextView
@@ -52,32 +55,36 @@ class TrackActivity : AppCompatActivity() {
         trackGenreValue = findViewById(R.id.tvTrackGenreValue)
         trackCountryValue = findViewById(R.id.tvTrackCountryValue)
 
-        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+
+        findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
             vibrate()
             finish()
         }
 
+
         Glide.with(applicationContext)
-            .load(track.coverUrl.replaceAfterLast('/',"512x512bb.jpg"))
+            .load(track.coverUrl.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder)
             .centerCrop()
             .into(trackCover)
 
         trackTitle.text = track.trackName
         artistName.text = track.artistName
-        trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-        trackDurationValue.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        trackDuration.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        trackDurationValue.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
         testFun(track.collectionName, trackAlbumText, trackAlbumValue)
         testFun(track.releaseDate.substring(0, 4), trackYearText, trackYearValue)
         testFun(track.primaryGenreName, trackGenreText, trackGenreValue)
-        testFun(track.country, trackCountryText, trackCountryValue)
-
+        testFun(getCountryName(track.country), trackCountryText, trackCountryValue)
     }
+
     private fun testFun(str: String, itemViewText: TextView, itemViewValue: TextView) {
         if (str.isNotEmpty()) {
             itemViewValue.text = str
-        }else{
+        } else {
             itemViewText.isVisible = false
             itemViewValue.isVisible = false
         }

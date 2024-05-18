@@ -31,7 +31,14 @@
         <item name="iconSize">@dimen/primaryIconSize</item>
     </style>
 
+    <style name="customToolbar" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h3TextSize</item>
+    </style>
+
     <style name="settingsItem">
+        <item name="android:paddingStart">@dimen/primaryMarginPaddingSize</item>
+        <item name="android:paddingEnd">@dimen/secondaryMarginPaddingSize</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">@dimen/settingsItemPaddingMarginSize</item>
