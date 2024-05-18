@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toolbar
@@ -75,19 +76,24 @@ class TrackActivity : AppCompatActivity() {
         trackDurationValue.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
-        testFun(track.collectionName, trackAlbumText, trackAlbumValue)
-        testFun(track.releaseDate.substring(0, 4), trackYearText, trackYearValue)
-        testFun(track.primaryGenreName, trackGenreText, trackGenreValue)
-        testFun(getCountryName(track.country), trackCountryText, trackCountryValue)
+        checkAndSetTrackInformationField(track.collectionName, trackAlbumText, trackAlbumValue)
+        checkAndSetTrackInformationField(track.releaseDate.substring(0, 4), trackYearText, trackYearValue)
+        checkAndSetTrackInformationField(track.primaryGenreName, trackGenreText, trackGenreValue)
+        checkAndSetTrackInformationField(getCountryName(track.country), trackCountryText, trackCountryValue)
     }
-
-    private fun testFun(str: String, itemViewText: TextView, itemViewValue: TextView) {
+    
+    private fun checkAndSetTrackInformationField(str: String, itemViewText: TextView, itemViewValue: TextView) {
         if (str.isNotEmpty()) {
             itemViewValue.text = str
         } else {
             itemViewText.isVisible = false
             itemViewValue.isVisible = false
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("TrackActivity", "onStop on")
     }
 
 }
