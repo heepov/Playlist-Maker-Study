@@ -37,10 +37,12 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val service = retrofit.create(ItunesApi::class.java)
 
-    private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter {
-        addTrackToHistory(it)
-        showTrackView(it)
+    private val listSearchQueryTracks = ArrayList<Track>()
+    private val adapterSearchQuery: TrackAdapter by lazy {
+        TrackAdapter {
+            addTrackToHistory(it)
+            showTrackView(it)
+        }
     }
 
     private lateinit var recyclerViewSearch: RecyclerView
@@ -53,10 +55,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderErrorRefreshButton: Button
     private lateinit var placeholderErrorLayout: LinearLayout
 
-    private val searchHistoryList = ArrayList<Track>()
-    private val searchHistoryAdapter = TrackAdapter {
-        showTrackView(it)
+    private val listSearchHistoryTracks = ArrayList<Track>()
+    private val adapterSearchHistory: TrackAdapter by lazy {
+        TrackAdapter{
+            showTrackView(it)
+        }
     }
+
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
     private lateinit var searchHistoryRecyclerView: RecyclerView
@@ -83,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById<LinearLayout>(R.id.searchHistoryLayout)
         searchHistoryClearButton = findViewById<Button>(R.id.btnClearSearchHistory)
         searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.rvSearchHistoryList)
-        searchHistoryList.addAll(
+        listSearchHistoryTracks.addAll(
             SearchHistory(
                 getSharedPreferences(
                     HISTORY_PREFERENCE,
@@ -93,10 +98,10 @@ class SearchActivity : AppCompatActivity() {
         )
         searchHistoryVisibility()
 
-        searchHistoryAdapter.tracks = searchHistoryList
+        adapterSearchHistory.tracks = listSearchHistoryTracks
         searchHistoryRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        searchHistoryRecyclerView.adapter = searchHistoryAdapter
+        searchHistoryRecyclerView.adapter = adapterSearchHistory
 
         if (searchString.isNotEmpty())
             searchField.setText(searchString)
@@ -109,8 +114,8 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             searchField.setText("")
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
-            tracks.clear()
-            adapter.notifyDataSetChanged()
+            listSearchQueryTracks.clear()
+            adapterSearchQuery.notifyDataSetChanged()
             placeHolderErrorProcessing(null)
             vibrate()
         }
@@ -141,7 +146,7 @@ class SearchActivity : AppCompatActivity() {
                 searchHistoryVisibility(searchField.hasFocus() && s?.isEmpty() == true)
 
                 if (s?.isEmpty() == true)
-                    tracks.clear()
+                    listSearchQueryTracks.clear()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -159,10 +164,10 @@ class SearchActivity : AppCompatActivity() {
         searchField.addTextChangedListener(simpleTextWatcher)
 
 
-        adapter.tracks = tracks
+        adapterSearchQuery.tracks = listSearchQueryTracks
         recyclerViewSearch.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerViewSearch.adapter = adapter
+        recyclerViewSearch.adapter = adapterSearchQuery
     }
 
     private fun search(queryInput: String) {
@@ -176,9 +181,9 @@ class SearchActivity : AppCompatActivity() {
                         when (response.code()) {
                             200 -> {
                                 if (!response.body()?.results.isNullOrEmpty()) {
-                                    tracks.clear()
-                                    tracks.addAll(response.body()?.results!!)
-                                    adapter.notifyDataSetChanged()
+                                    listSearchQueryTracks.clear()
+                                    listSearchQueryTracks.addAll(response.body()?.results!!)
+                                    adapterSearchQuery.notifyDataSetChanged()
                                     placeHolderErrorProcessing(null)
                                 } else
                                     placeHolderErrorProcessing(response.code())
@@ -208,8 +213,8 @@ class SearchActivity : AppCompatActivity() {
             placeholderErrorLayout.visibility = View.GONE
             return
         }
-        tracks.clear()
-        adapter.notifyDataSetChanged()
+        listSearchQueryTracks.clear()
+        adapterSearchQuery.notifyDataSetChanged()
 
         placeholderErrorLayout.visibility = View.VISIBLE
         when (responseCode) {
@@ -248,8 +253,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun updateSearchHistoryList() {
-        searchHistoryList.clear()
-        searchHistoryList.addAll(
+        listSearchHistoryTracks.clear()
+        listSearchHistoryTracks.addAll(
             SearchHistory(
                 getSharedPreferences(
                     HISTORY_PREFERENCE,
@@ -257,7 +262,7 @@ class SearchActivity : AppCompatActivity() {
                 )
             ).getTrackList()
         )
-        searchHistoryAdapter.notifyDataSetChanged()
+        adapterSearchHistory.notifyDataSetChanged()
         searchHistoryVisibility()
     }
 
@@ -278,8 +283,10 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-    private fun searchHistoryVisibility(condition: Boolean = true){
-        searchHistoryLayout.isVisible = condition && searchHistoryList.isNotEmpty() && searchField.text.isEmpty()
+
+    private fun searchHistoryVisibility(condition: Boolean = true) {
+        searchHistoryLayout.isVisible =
+            condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
     }
 
     companion object {

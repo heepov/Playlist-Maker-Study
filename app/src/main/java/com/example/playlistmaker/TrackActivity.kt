@@ -38,7 +38,17 @@ class TrackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track)
         val track = gson.fromJson(intent.getStringExtra("track"), Track::class.java)
-
+        // For debug purposes
+//        val track = Track(
+//            1,
+//            "Name",
+//            "Artist Name",
+//            1000,
+//            "404",
+//            "", //НЕТУ АЛЬБОМА ТАКИЕ ДЕЛА
+//            "1999",
+//            "Rock",
+//            country = "US")
         trackCover = findViewById(R.id.ivTrackCover)
         trackTitle = findViewById(R.id.tvTrackTitle)
         artistName = findViewById(R.id.tvArtistName)
@@ -77,12 +87,24 @@ class TrackActivity : AppCompatActivity() {
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
         checkAndSetTrackInformationField(track.collectionName, trackAlbumText, trackAlbumValue)
-        checkAndSetTrackInformationField(track.releaseDate.substring(0, 4), trackYearText, trackYearValue)
+        checkAndSetTrackInformationField(
+            track.releaseDate.substring(0, 4),
+            trackYearText,
+            trackYearValue
+        )
         checkAndSetTrackInformationField(track.primaryGenreName, trackGenreText, trackGenreValue)
-        checkAndSetTrackInformationField(getCountryName(track.country), trackCountryText, trackCountryValue)
+        checkAndSetTrackInformationField(
+            getCountryName(track.country),
+            trackCountryText,
+            trackCountryValue
+        )
     }
-    
-    private fun checkAndSetTrackInformationField(str: String, itemViewText: TextView, itemViewValue: TextView) {
+
+    private fun checkAndSetTrackInformationField(
+        str: String,
+        itemViewText: TextView,
+        itemViewValue: TextView
+    ) {
         if (str.isNotEmpty()) {
             itemViewValue.text = str
         } else {
