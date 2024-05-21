@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,7 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.data.ItunesApi
 import com.example.playlistmaker.data.Track
 import com.example.playlistmaker.data.TracksList
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,9 +37,12 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val service = retrofit.create(ItunesApi::class.java)
 
-    private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter {
-        addTrackToHistory(it)
+    private val listSearchQueryTracks = ArrayList<Track>()
+    private val adapterSearchQuery: TrackAdapter by lazy {
+        TrackAdapter {
+            addTrackToHistory(it)
+            showTrackView(it)
+        }
     }
 
     private lateinit var recyclerViewSearch: RecyclerView
@@ -50,10 +55,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderErrorRefreshButton: Button
     private lateinit var placeholderErrorLayout: LinearLayout
 
-    private val searchHistoryList = ArrayList<Track>()
-    private val searchHistoryAdapter = TrackAdapter {
-//        removeTrackFromHistory(it)
+    private val listSearchHistoryTracks = ArrayList<Track>()
+    private val adapterSearchHistory: TrackAdapter by lazy {
+        TrackAdapter{
+            showTrackView(it)
+        }
     }
+
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
     private lateinit var searchHistoryRecyclerView: RecyclerView
@@ -80,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById<LinearLayout>(R.id.searchHistoryLayout)
         searchHistoryClearButton = findViewById<Button>(R.id.btnClearSearchHistory)
         searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.rvSearchHistoryList)
-        searchHistoryList.addAll(
+        listSearchHistoryTracks.addAll(
             SearchHistory(
                 getSharedPreferences(
                     HISTORY_PREFERENCE,
@@ -90,15 +98,15 @@ class SearchActivity : AppCompatActivity() {
         )
         searchHistoryVisibility()
 
-        searchHistoryAdapter.tracks = searchHistoryList
+        adapterSearchHistory.tracks = listSearchHistoryTracks
         searchHistoryRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        searchHistoryRecyclerView.adapter = searchHistoryAdapter
+        searchHistoryRecyclerView.adapter = adapterSearchHistory
 
         if (searchString.isNotEmpty())
             searchField.setText(searchString)
 
-        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+        findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
             vibrate()
             finish()
         }
@@ -106,8 +114,8 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             searchField.setText("")
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
-            tracks.clear()
-            adapter.notifyDataSetChanged()
+            listSearchQueryTracks.clear()
+            adapterSearchQuery.notifyDataSetChanged()
             placeHolderErrorProcessing(null)
             vibrate()
         }
@@ -136,10 +144,9 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 searchHistoryVisibility(searchField.hasFocus() && s?.isEmpty() == true)
-                // добавил вот такое условие, чтобы при удалении запроса поиска НЕ через кнопку очистить (крестик)
-                // и заново не начав писать запрос поиска, чтобы до нажатия применить старый список не появлялся на экране
+
                 if (s?.isEmpty() == true)
-                    tracks.clear()
+                    listSearchQueryTracks.clear()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -157,10 +164,10 @@ class SearchActivity : AppCompatActivity() {
         searchField.addTextChangedListener(simpleTextWatcher)
 
 
-        adapter.tracks = tracks
+        adapterSearchQuery.tracks = listSearchQueryTracks
         recyclerViewSearch.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerViewSearch.adapter = adapter
+        recyclerViewSearch.adapter = adapterSearchQuery
     }
 
     private fun search(queryInput: String) {
@@ -174,9 +181,9 @@ class SearchActivity : AppCompatActivity() {
                         when (response.code()) {
                             200 -> {
                                 if (!response.body()?.results.isNullOrEmpty()) {
-                                    tracks.clear()
-                                    tracks.addAll(response.body()?.results!!)
-                                    adapter.notifyDataSetChanged()
+                                    listSearchQueryTracks.clear()
+                                    listSearchQueryTracks.addAll(response.body()?.results!!)
+                                    adapterSearchQuery.notifyDataSetChanged()
                                     placeHolderErrorProcessing(null)
                                 } else
                                     placeHolderErrorProcessing(response.code())
@@ -206,8 +213,8 @@ class SearchActivity : AppCompatActivity() {
             placeholderErrorLayout.visibility = View.GONE
             return
         }
-        tracks.clear()
-        adapter.notifyDataSetChanged()
+        listSearchQueryTracks.clear()
+        adapterSearchQuery.notifyDataSetChanged()
 
         placeholderErrorLayout.visibility = View.VISIBLE
         when (responseCode) {
@@ -236,15 +243,18 @@ class SearchActivity : AppCompatActivity() {
         vibrate()
     }
 
-//    private fun removeTrackFromHistory(track: Track) {
-//        SearchHistory(getSharedPreferences(HISTORY_PREFERENCE, MODE_PRIVATE)).deleteTrack(track)
-//        updateSearchHistoryList()
-//        vibrate()
-//    }
+    private fun showTrackView(track: Track) {
+        startActivity(
+            Intent(this, TrackActivity::class.java).putExtra(
+                "track",
+                Gson().toJson(track)
+            )
+        )
+    }
 
     private fun updateSearchHistoryList() {
-        searchHistoryList.clear()
-        searchHistoryList.addAll(
+        listSearchHistoryTracks.clear()
+        listSearchHistoryTracks.addAll(
             SearchHistory(
                 getSharedPreferences(
                     HISTORY_PREFERENCE,
@@ -252,7 +262,7 @@ class SearchActivity : AppCompatActivity() {
                 )
             ).getTrackList()
         )
-        searchHistoryAdapter.notifyDataSetChanged()
+        adapterSearchHistory.notifyDataSetChanged()
         searchHistoryVisibility()
     }
 
@@ -273,8 +283,10 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-    private fun searchHistoryVisibility(condition: Boolean = true){
-        searchHistoryLayout.isVisible = condition && searchHistoryList.isNotEmpty() && searchField.text.isEmpty()
+
+    private fun searchHistoryVisibility(condition: Boolean = true) {
+        searchHistoryLayout.isVisible =
+            condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
     }
 
     companion object {

@@ -3,6 +3,9 @@
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/blue</item>
     </style>
+    <style name="icon.primary">
+        <item name="tint">@color/black</item>
+    </style>
 
     <style name="Theme.PlaylistMaker.theme">
         <item name="android:background">@color/white</item>
@@ -18,8 +21,15 @@
     <style name="h5.theme">
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="h6.theme">
+        <item name="android:textColor">@color/black</item>
+    </style>
 
     <style name="p.theme">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="p4.theme">
         <item name="android:textColor">@color/black</item>
     </style>
 

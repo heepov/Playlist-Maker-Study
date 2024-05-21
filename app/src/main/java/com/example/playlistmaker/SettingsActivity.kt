@@ -4,10 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
@@ -57,7 +55,7 @@ class SettingsActivity : AppCompatActivity() {
             vibrate()
         }
 
-        findViewById<ImageView>(R.id.ivBack).setOnClickListener {
+        findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
             vibrate()
             finish()
         }
