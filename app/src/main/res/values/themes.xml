@@ -78,6 +78,10 @@
     <style name="h4.textErrorPlaceholder.theme">
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="btn.player">
+        <item name="backgroundTint">@color/black</item>
+    </style>
+
 
 
 </resources>

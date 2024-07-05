@@ -1,7 +1,11 @@
 package com.example.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toolbar
@@ -15,6 +19,16 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val REFRESH_DELAY_MILLIS = 100L
+        private const val DEFAULT_TRACK_TIMER = "00:00"
+    }
+
+
     private val gson = Gson()
 
     private lateinit var trackCover: ImageView
@@ -33,6 +47,11 @@ class TrackActivity : AppCompatActivity() {
     private lateinit var trackYearValue: TextView
     private lateinit var trackGenreValue: TextView
     private lateinit var trackCountryValue: TextView
+
+    private lateinit var btnPalyStop: Button
+    private var playerState = STATE_DEFAULT
+    private var mediaPlayer = MediaPlayer()
+    private var mainThreadHandler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +85,10 @@ class TrackActivity : AppCompatActivity() {
         trackGenreValue = findViewById(R.id.tvTrackGenreValue)
         trackCountryValue = findViewById(R.id.tvTrackCountryValue)
 
+        btnPalyStop = findViewById(R.id.btnPlayStop)
+        mainThreadHandler = Handler(Looper.getMainLooper())
+
+
 
         findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
             vibrate()
@@ -81,8 +104,7 @@ class TrackActivity : AppCompatActivity() {
 
         trackTitle.text = track.trackName
         artistName.text = track.artistName
-        trackDuration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        trackDuration.text = DEFAULT_TRACK_TIMER
         trackDurationValue.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
@@ -98,6 +120,17 @@ class TrackActivity : AppCompatActivity() {
             trackCountryText,
             trackCountryValue
         )
+        Log.d("TrackPrewiew", if (track.previewUrl != null) track.previewUrl else "NULL")
+        if (track.previewUrl != null) {
+            preparePlayer(track.previewUrl)
+            btnPalyStop.setOnClickListener {
+                Log.d("TrackPrewiew", "onStop off")
+                playbackControl()
+            }
+        } else {
+            btnPalyStop.setBackgroundResource(R.drawable.ic_cant_play)
+            trackDuration.text = "Can't play"
+        }
     }
 
     private fun checkAndSetTrackInformationField(
@@ -113,9 +146,79 @@ class TrackActivity : AppCompatActivity() {
         }
     }
 
+    private fun preparePlayer(trackUrl: String) {
+        mediaPlayer.setDataSource(trackUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            btnPalyStop.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            btnPalyStop.setBackgroundResource(R.drawable.ic_play)
+            playerState = STATE_PREPARED
+            stopTimer()
+            trackDuration.text = DEFAULT_TRACK_TIMER
+        }
+    }
+
+    private fun playbackControl() {
+        Log.d("TrackPrewiew", "PLAYER SATE IS $playerState")
+
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        btnPalyStop.setBackgroundResource(R.drawable.ic_pause)
+        playerState = STATE_PLAYING
+        startTimer()
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        btnPalyStop.setBackgroundResource(R.drawable.ic_play)
+        playerState = STATE_PAUSED
+        stopTimer()
+    }
+
+    private fun startTimer() {
+        mainThreadHandler?.postDelayed(object : Runnable {
+            override fun run() {
+                trackDuration.text = SimpleDateFormat(
+                    "mm:ss",
+                    Locale.getDefault()
+                ).format(mediaPlayer.currentPosition).toString()
+                mainThreadHandler?.postDelayed(this, REFRESH_DELAY_MILLIS)
+            }
+        }, REFRESH_DELAY_MILLIS)
+    }
+
+    private fun stopTimer() {
+        mainThreadHandler?.removeCallbacksAndMessages(null)
+    }
+
     override fun onStop() {
         super.onStop()
         Log.d("TrackActivity", "onStop on")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        stopTimer()
     }
 
 }
