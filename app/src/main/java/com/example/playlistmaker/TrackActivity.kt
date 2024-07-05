@@ -151,6 +151,7 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             btnPalyStop.isEnabled = true
+            btnPalyStop.setAlpha(1f)
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {

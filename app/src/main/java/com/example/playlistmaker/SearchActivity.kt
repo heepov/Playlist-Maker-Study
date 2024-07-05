@@ -33,6 +33,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
+
+    companion object {
+        const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
+        const val SEARCH_STRING_DEF = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
@@ -69,6 +78,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistoryClearButton: Button
     private lateinit var searchHistoryRecyclerView: RecyclerView
 
+    private var isClickAllowed = true
     private val searchRunnable = Runnable { search(searchString) }
     private var mainThreadHandler: Handler? = null
     private var progressBar:ProgressBar? = null
@@ -181,6 +191,15 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewSearch.adapter = adapterSearchQuery
     }
 
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainThreadHandler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private fun searchDebounce(query:String) {
         searchString  = query
         mainThreadHandler?.removeCallbacks(searchRunnable)
@@ -269,15 +288,15 @@ class SearchActivity : AppCompatActivity() {
         vibrate()
     }
 
-
-
     private fun showTrackView(track: Track) {
-        startActivity(
-            Intent(this, TrackActivity::class.java).putExtra(
-                "track",
-                Gson().toJson(track)
+        if (clickDebounce()) {
+            startActivity(
+                Intent(this, TrackActivity::class.java).putExtra(
+                    "track",
+                    Gson().toJson(track)
+                )
             )
-        )
+        }
     }
 
     private fun updateSearchHistoryList() {
@@ -315,11 +334,5 @@ class SearchActivity : AppCompatActivity() {
     private fun searchHistoryVisibility(condition: Boolean = true) {
         searchHistoryLayout.isVisible =
             condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
-    }
-
-    companion object {
-        const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
-        const val SEARCH_STRING_DEF = ""
-        private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }
 }
