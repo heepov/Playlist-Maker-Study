@@ -91,7 +91,6 @@ class SearchActivity : AppCompatActivity() {
 
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
-//        mainThreadHandler = Handler(Looper.getMainLooper())
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
         recyclerViewSearch = findViewById<RecyclerView>(R.id.rvSongSearchList)
@@ -172,7 +171,6 @@ class SearchActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 searchString = s.toString()
-//                search(searchString) // мне кажется такое поведение поисковой строки более привычное
             }
 
         }

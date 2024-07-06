@@ -29,9 +29,6 @@ class TrackActivity : AppCompatActivity() {
         private const val REFRESH_DELAY_MILLIS = 100L
     }
 
-
-    private val gson = Gson()
-
     private lateinit var trackCover: ImageView
     private lateinit var trackTitle: TextView
     private lateinit var artistName: TextView
@@ -54,7 +51,7 @@ class TrackActivity : AppCompatActivity() {
     private var mediaPlayer = MediaPlayer()
     private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    private var track:Track? = null
+    private var track: Track? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,13 +105,21 @@ class TrackActivity : AppCompatActivity() {
         trackDuration.text = dateFormat.format(0L)
         trackDurationValue.text = dateFormat.format(track?.trackTimeMillis)
 
-        checkAndSetTrackInformationField(track?.collectionName.toString(), trackAlbumText, trackAlbumValue)
+        checkAndSetTrackInformationField(
+            track?.collectionName.toString(),
+            trackAlbumText,
+            trackAlbumValue
+        )
         checkAndSetTrackInformationField(
             track?.releaseDate?.substring(0, 4).toString(),
             trackYearText,
             trackYearValue
         )
-        checkAndSetTrackInformationField(track?.primaryGenreName.toString(), trackGenreText, trackGenreValue)
+        checkAndSetTrackInformationField(
+            track?.primaryGenreName.toString(),
+            trackGenreText,
+            trackGenreValue
+        )
         checkAndSetTrackInformationField(
             getCountryName(track?.country.toString()),
             trackCountryText,

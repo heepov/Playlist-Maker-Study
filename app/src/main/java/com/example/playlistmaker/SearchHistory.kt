@@ -9,8 +9,10 @@ import com.google.gson.reflect.TypeToken
 
 class SearchHistory(val sharedPreferences: SharedPreferences) {
     private val tackList = ArrayList<Track>()
+
     init {
-        val tmpTrackList: MutableList<Track>? = createTrackListFromJson(sharedPreferences.getString(TRACKS_KEY, null))
+        val tmpTrackList: MutableList<Track>? =
+            createTrackListFromJson(sharedPreferences.getString(TRACKS_KEY, null))
         if (tmpTrackList != null) {
             tackList.addAll(tmpTrackList)
         }
@@ -23,14 +25,8 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
             putString(TRACKS_KEY, createJsonFromTrackList(tackList))
         }
     }
-//    fun deleteTrack(track: Track) {
-//        tackList.remove(track)
-//        sharedPreferences.edit {
-//            putString(TRACKS_KEY, createJsonFromTrackList(tackList))
-//        }
-//    }
 
-    fun clearTrackList(){
+    fun clearTrackList() {
         tackList.clear()
         sharedPreferences.edit {
             putString(TRACKS_KEY, null)
@@ -41,7 +37,7 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
         return tackList
     }
 
-    private fun checkAndCutTrackList(){
+    private fun checkAndCutTrackList() {
         if (tackList.size > 10) {
             val tmpList: List<Track> = tackList.subList(0, 10).toList()
             tackList.clear()
@@ -52,7 +48,7 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
     private fun checkExistAndAddTrack(track: Track) {
         val index = tackList.indexOf(track)
         if (index == -1) tackList.add(0, track)
-        else tackList.add(0,tackList.removeAt(index))
+        else tackList.add(0, tackList.removeAt(index))
     }
 
     private fun createJsonFromTrackList(tackList: MutableList<Track>): String {
