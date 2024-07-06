@@ -69,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val listSearchHistoryTracks = ArrayList<Track>()
     private val adapterSearchHistory: TrackAdapter by lazy {
-        TrackAdapter{
+        TrackAdapter {
             showTrackView(it)
         }
     }
@@ -80,8 +80,8 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
     private val searchRunnable = Runnable { search(searchString) }
-    private var mainThreadHandler: Handler? = null
-    private var progressBar:ProgressBar? = null
+    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
+    private var progressBar: ProgressBar? = null
 
 
     private var searchString: String = SEARCH_STRING_DEF
@@ -91,8 +91,8 @@ class SearchActivity : AppCompatActivity() {
 
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
-        mainThreadHandler = Handler(Looper.getMainLooper())
-        progressBar  = findViewById<ProgressBar>(R.id.progressBar)
+//        mainThreadHandler = Handler(Looper.getMainLooper())
+        progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
         recyclerViewSearch = findViewById<RecyclerView>(R.id.rvSongSearchList)
         searchField = findViewById<EditText>(R.id.etSearchField)
@@ -191,19 +191,19 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewSearch.adapter = adapterSearchQuery
     }
 
-    private fun clickDebounce() : Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            mainThreadHandler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            mainThreadHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
     }
 
-    private fun searchDebounce(query:String) {
-        searchString  = query
-        mainThreadHandler?.removeCallbacks(searchRunnable)
-        mainThreadHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    private fun searchDebounce(query: String) {
+        searchString = query
+        mainThreadHandler.removeCallbacks(searchRunnable)
+        mainThreadHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun search(queryInput: String) {
@@ -232,7 +232,6 @@ class SearchActivity : AppCompatActivity() {
 
                             else -> {
                                 placeHolderErrorProcessing(response.code())
-                                Log.d("SearchActivity", "Response code: ${response.code()}")
                             }
                         }
                     }
@@ -240,12 +239,10 @@ class SearchActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<TracksList>, t: Throwable) {
                         progressBar?.visibility = View.GONE
                         placeHolderErrorProcessing(-1)
-                        Log.d("SearchActivity", "onFailure: ${t.message.toString()}")
-
                     }
 
                 })
-        }else{
+        } else {
             progressBar?.visibility = View.GONE
         }
 
@@ -290,12 +287,8 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showTrackView(track: Track) {
         if (clickDebounce()) {
-            startActivity(
-                Intent(this, TrackActivity::class.java).putExtra(
-                    "track",
-                    Gson().toJson(track)
-                )
-            )
+            val intent = Intent(this, TrackActivity::class.java).putExtra("track", track)
+            startActivity(intent)
         }
     }
 
@@ -334,5 +327,10 @@ class SearchActivity : AppCompatActivity() {
     private fun searchHistoryVisibility(condition: Boolean = true) {
         searchHistoryLayout.isVisible =
             condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainThreadHandler.removeCallbacksAndMessages(null)
     }
 }

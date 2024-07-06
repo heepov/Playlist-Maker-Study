@@ -96,17 +96,6 @@
             app:layout_constraintStart_toStartOf="@+id/glLeft24"
             app:layout_constraintTop_toTopOf="@+id/btnPlayStop" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/btnPlayStop"-->
-<!--            style="@style/icon.primary"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="36dp"-->
-<!--            android:clickable="true"-->
-<!--            android:src="@drawable/ic_play"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/btnLike"-->
-<!--            app:layout_constraintStart_toEndOf="@id/btnAddLibrary"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/tvArtistName" />-->
         <Button
             android:id="@+id/btnPlayStop"
             style="@style/btn.player"
