@@ -54,7 +54,14 @@
             android:visibility="gone" />
 
     </LinearLayout>
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/bigIconSize"
+        android:layout_height="@dimen/bigIconSize"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"/>
     <include
         android:id="@+id/searchHistoryLayout"
         layout="@layout/search_history_view" />
@@ -72,7 +79,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSongSearchList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
             <include
                 android:id="@+id/placeholderErrorLayout"

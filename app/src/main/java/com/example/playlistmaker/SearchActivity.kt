@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +33,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class SearchActivity : AppCompatActivity() {
+
+    companion object {
+        const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
+        const val SEARCH_STRING_DEF = ""
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
@@ -57,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val listSearchHistoryTracks = ArrayList<Track>()
     private val adapterSearchHistory: TrackAdapter by lazy {
-        TrackAdapter{
+        TrackAdapter {
             showTrackView(it)
         }
     }
@@ -66,6 +78,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistoryClearButton: Button
     private lateinit var searchHistoryRecyclerView: RecyclerView
 
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable { search(searchString) }
+    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
+    private var progressBar: ProgressBar? = null
+
 
     private var searchString: String = SEARCH_STRING_DEF
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +90,9 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+//        mainThreadHandler = Handler(Looper.getMainLooper())
+        progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
         recyclerViewSearch = findViewById<RecyclerView>(R.id.rvSongSearchList)
         searchField = findViewById<EditText>(R.id.etSearchField)
@@ -113,6 +133,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             searchField.setText("")
+            progressBar?.visibility = View.GONE
             manager.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
             listSearchQueryTracks.clear()
             adapterSearchQuery.notifyDataSetChanged()
@@ -144,7 +165,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 searchHistoryVisibility(searchField.hasFocus() && s?.isEmpty() == true)
-
+                searchDebounce(s.toString())
                 if (s?.isEmpty() == true)
                     listSearchQueryTracks.clear()
             }
@@ -170,7 +191,25 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewSearch.adapter = adapterSearchQuery
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainThreadHandler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce(query: String) {
+        searchString = query
+        mainThreadHandler.removeCallbacks(searchRunnable)
+        mainThreadHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private fun search(queryInput: String) {
+        recyclerViewSearch.visibility = View.GONE
+        placeholderErrorLayout.visibility = View.GONE
+        progressBar?.visibility = View.VISIBLE
         if (queryInput.trim().isNotEmpty()) {
             service.search(queryInput)
                 .enqueue(object : Callback<TracksList> {
@@ -178,9 +217,11 @@ class SearchActivity : AppCompatActivity() {
                         call: Call<TracksList>,
                         response: Response<TracksList>
                     ) {
+                        progressBar?.visibility = View.GONE
                         when (response.code()) {
                             200 -> {
                                 if (!response.body()?.results.isNullOrEmpty()) {
+                                    recyclerViewSearch.visibility = View.VISIBLE
                                     listSearchQueryTracks.clear()
                                     listSearchQueryTracks.addAll(response.body()?.results!!)
                                     adapterSearchQuery.notifyDataSetChanged()
@@ -191,19 +232,20 @@ class SearchActivity : AppCompatActivity() {
 
                             else -> {
                                 placeHolderErrorProcessing(response.code())
-                                Log.d("SearchActivity", "Response code: ${response.code()}")
                             }
                         }
-
                     }
 
                     override fun onFailure(call: Call<TracksList>, t: Throwable) {
+                        progressBar?.visibility = View.GONE
                         placeHolderErrorProcessing(-1)
-                        Log.d("SearchActivity", "onFailure: ${t.message.toString()}")
                     }
 
                 })
+        } else {
+            progressBar?.visibility = View.GONE
         }
+
     }
 
     private fun placeHolderErrorProcessing(
@@ -244,12 +286,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showTrackView(track: Track) {
-        startActivity(
-            Intent(this, TrackActivity::class.java).putExtra(
-                "track",
-                Gson().toJson(track)
-            )
-        )
+        if (clickDebounce()) {
+            val intent = Intent(this, TrackActivity::class.java).putExtra("track", track)
+            startActivity(intent)
+        }
     }
 
     private fun updateSearchHistoryList() {
@@ -289,8 +329,8 @@ class SearchActivity : AppCompatActivity() {
             condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
     }
 
-    companion object {
-        const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
-        const val SEARCH_STRING_DEF = ""
+    override fun onDestroy() {
+        super.onDestroy()
+        mainThreadHandler.removeCallbacksAndMessages(null)
     }
 }

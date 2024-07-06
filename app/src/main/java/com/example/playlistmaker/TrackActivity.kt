@@ -1,7 +1,12 @@
 package com.example.playlistmaker
 
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
+import android.os.Parcelable
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toolbar
@@ -14,7 +19,17 @@ import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+
 class TrackActivity : AppCompatActivity() {
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val REFRESH_DELAY_MILLIS = 100L
+    }
+
+
     private val gson = Gson()
 
     private lateinit var trackCover: ImageView
@@ -34,10 +49,17 @@ class TrackActivity : AppCompatActivity() {
     private lateinit var trackGenreValue: TextView
     private lateinit var trackCountryValue: TextView
 
+    private lateinit var btnPalyStop: Button
+    private var playerState = STATE_DEFAULT
+    private var mediaPlayer = MediaPlayer()
+    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private var track:Track? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track)
-        val track = gson.fromJson(intent.getStringExtra("track"), Track::class.java)
+        track = intent.getParcelableExtra<Track>("track")
         // For debug purposes
 //        val track = Track(
 //            1,
@@ -66,6 +88,8 @@ class TrackActivity : AppCompatActivity() {
         trackGenreValue = findViewById(R.id.tvTrackGenreValue)
         trackCountryValue = findViewById(R.id.tvTrackCountryValue)
 
+        btnPalyStop = findViewById(R.id.btnPlayStop)
+
 
         findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
             vibrate()
@@ -74,30 +98,36 @@ class TrackActivity : AppCompatActivity() {
 
 
         Glide.with(applicationContext)
-            .load(track.coverUrl.replaceAfterLast('/', "512x512bb.jpg"))
+            .load(track?.coverUrl?.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder)
             .centerCrop()
             .into(trackCover)
 
-        trackTitle.text = track.trackName
-        artistName.text = track.artistName
-        trackDuration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
-        trackDurationValue.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        trackTitle.text = track?.trackName
+        artistName.text = track?.artistName
+        trackDuration.text = dateFormat.format(0L)
+        trackDurationValue.text = dateFormat.format(track?.trackTimeMillis)
 
-        checkAndSetTrackInformationField(track.collectionName, trackAlbumText, trackAlbumValue)
+        checkAndSetTrackInformationField(track?.collectionName.toString(), trackAlbumText, trackAlbumValue)
         checkAndSetTrackInformationField(
-            track.releaseDate.substring(0, 4),
+            track?.releaseDate?.substring(0, 4).toString(),
             trackYearText,
             trackYearValue
         )
-        checkAndSetTrackInformationField(track.primaryGenreName, trackGenreText, trackGenreValue)
+        checkAndSetTrackInformationField(track?.primaryGenreName.toString(), trackGenreText, trackGenreValue)
         checkAndSetTrackInformationField(
-            getCountryName(track.country),
+            getCountryName(track?.country.toString()),
             trackCountryText,
             trackCountryValue
         )
+        if (track?.previewUrl != null) {
+            preparePlayer(track?.previewUrl.toString())
+            btnPalyStop.setOnClickListener {
+                playbackControl()
+            }
+        } else {
+            btnPalyStop.setBackgroundResource(R.drawable.ic_cant_play)
+        }
     }
 
     private fun checkAndSetTrackInformationField(
@@ -113,9 +143,74 @@ class TrackActivity : AppCompatActivity() {
         }
     }
 
+    private fun preparePlayer(trackUrl: String) {
+        mediaPlayer.setDataSource(trackUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            btnPalyStop.isEnabled = true
+            btnPalyStop.setAlpha(1f)
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            btnPalyStop.setBackgroundResource(R.drawable.ic_play)
+            playerState = STATE_PREPARED
+            stopTimer()
+            trackDuration.text = dateFormat.format(0L)
+        }
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        btnPalyStop.setBackgroundResource(R.drawable.ic_pause)
+        playerState = STATE_PLAYING
+        startTimer()
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        btnPalyStop.setBackgroundResource(R.drawable.ic_play)
+        playerState = STATE_PAUSED
+        stopTimer()
+    }
+
+    private fun startTimer() {
+        mainThreadHandler.postDelayed(object : Runnable {
+            override fun run() {
+                trackDuration.text = dateFormat.format(mediaPlayer.currentPosition)
+                mainThreadHandler.postDelayed(this, REFRESH_DELAY_MILLIS)
+            }
+        }, REFRESH_DELAY_MILLIS)
+    }
+
+    private fun stopTimer() {
+        mainThreadHandler.removeCallbacksAndMessages(null)
+    }
+
     override fun onStop() {
         super.onStop()
-        Log.d("TrackActivity", "onStop on")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        stopTimer()
     }
 
 }
