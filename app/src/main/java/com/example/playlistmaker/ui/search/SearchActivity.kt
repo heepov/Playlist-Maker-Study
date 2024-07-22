@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -21,16 +20,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.data.ItunesApi
-import com.example.playlistmaker.data.Track
-import com.example.playlistmaker.data.TracksList
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
+import com.example.playlistmaker.HISTORY_PREFERENCE
+import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.ui.player.PlayerActivity
+import com.example.playlistmaker.domain.search.consumer.TrackConsumer
+import com.example.playlistmaker.domain.search.model.Resource
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.vibrate
 
 class SearchActivity : AppCompatActivity() {
 
@@ -41,14 +38,6 @@ class SearchActivity : AppCompatActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-
-    private val itunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val service = retrofit.create(ItunesApi::class.java)
-
     private val listSearchQueryTracks = ArrayList<Track>()
     private val adapterSearchQuery: TrackAdapter by lazy {
         TrackAdapter {
@@ -56,11 +45,18 @@ class SearchActivity : AppCompatActivity() {
             showTrackView(it)
         }
     }
+    private val adapterSearchHistory: TrackAdapter by lazy {
+        TrackAdapter {
+            showTrackView(it)
+        }
+    }
+    private val searchTracksUseCase = Creator.provideTracksInteractor()
+    private val handler = Handler(Looper.getMainLooper())
+    private var detailsRunnable: Runnable? = null
 
     private lateinit var recyclerViewSearch: RecyclerView
     private lateinit var searchField: EditText
     private lateinit var clearButton: ImageView
-
     private lateinit var placeholderErrorImage: ImageView
     private lateinit var placeholderErrorMessage: TextView
     private lateinit var placeholderErrorExtraMessage: TextView
@@ -68,11 +64,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderErrorLayout: LinearLayout
 
     private val listSearchHistoryTracks = ArrayList<Track>()
-    private val adapterSearchHistory: TrackAdapter by lazy {
-        TrackAdapter {
-            showTrackView(it)
-        }
-    }
+
 
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
@@ -209,41 +201,38 @@ class SearchActivity : AppCompatActivity() {
         placeholderErrorLayout.visibility = View.GONE
         progressBar?.visibility = View.VISIBLE
         if (queryInput.trim().isNotEmpty()) {
-            service.search(queryInput)
-                .enqueue(object : Callback<TracksList> {
-                    override fun onResponse(
-                        call: Call<TracksList>,
-                        response: Response<TracksList>
-                    ) {
-                        progressBar?.visibility = View.GONE
-                        when (response.code()) {
-                            200 -> {
-                                if (!response.body()?.results.isNullOrEmpty()) {
+            searchTracksUseCase.searchTracks(
+                expression = queryInput,
+                consumer = object : TrackConsumer {
+                    override fun consume(data: Resource<List<Track>>) {
+                        val currentRunnable = detailsRunnable
+                        if (currentRunnable != null) {
+                            handler.removeCallbacks(currentRunnable)
+                        }
+                        val newDetailsRunnable = Runnable {
+                            when (data) {
+                                is Resource.Error -> {
+                                    progressBar?.visibility = View.GONE
+                                    placeHolderErrorProcessing(data.message.toInt())
+                                }
+                                is Resource.Success -> {
+                                    progressBar?.visibility = View.GONE
                                     recyclerViewSearch.visibility = View.VISIBLE
                                     listSearchQueryTracks.clear()
-                                    listSearchQueryTracks.addAll(response.body()?.results!!)
+                                    listSearchQueryTracks.addAll(data.data)
                                     adapterSearchQuery.notifyDataSetChanged()
                                     placeHolderErrorProcessing(null)
-                                } else
-                                    placeHolderErrorProcessing(response.code())
-                            }
-
-                            else -> {
-                                placeHolderErrorProcessing(response.code())
+                                }
                             }
                         }
+                        detailsRunnable = newDetailsRunnable
+                        handler.post(newDetailsRunnable)
                     }
-
-                    override fun onFailure(call: Call<TracksList>, t: Throwable) {
-                        progressBar?.visibility = View.GONE
-                        placeHolderErrorProcessing(-1)
-                    }
-
-                })
+                }
+            )
         } else {
             progressBar?.visibility = View.GONE
         }
-
     }
 
     private fun placeHolderErrorProcessing(
@@ -285,7 +274,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showTrackView(track: Track) {
         if (clickDebounce()) {
-            val intent = Intent(this, TrackActivity::class.java).putExtra("track", track)
+            val intent = Intent(this, PlayerActivity::class.java).putExtra("track", track)
             startActivity(intent)
         }
     }

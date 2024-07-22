@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data
+package com.example.playlistmaker.data.search.mapper
 
 data class Country(
     val alpha2: String,
