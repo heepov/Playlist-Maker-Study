@@ -47,7 +47,6 @@ class MediaMediaPlayerRepositoryImpl: MediaPlayerRepository {
         listner.onStateChange(mediaPlayerState) }
 
     override fun getPlayerCurrentTime(): String {
-        Log.d("PLAYER", mediaPlayer.currentPosition.toString())
         return dateFormat.format(mediaPlayer.currentPosition)
     }
 

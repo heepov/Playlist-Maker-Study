@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.search.repository
 
+import com.example.playlistmaker.R
 import com.example.playlistmaker.data.search.dto.TracksSearchRequest
 import com.example.playlistmaker.data.search.dto.TracksSearchResponse
 import com.example.playlistmaker.data.search.mapper.TracksMapper
@@ -18,7 +19,7 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
             }
             Resource.Success(tracksList)
         } else {
-             Resource.Error("Произошла сетевая ошибка")
+             Resource.Error(R.string.connectionProblem.toString())
         }
     }
 
