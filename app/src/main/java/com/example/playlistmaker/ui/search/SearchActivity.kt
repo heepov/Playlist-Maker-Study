@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -14,20 +15,22 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.HISTORY_PREFERENCE
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.ui.player.PlayerActivity
-import com.example.playlistmaker.domain.search.consumer.TrackConsumer
+import com.example.playlistmaker.domain.search.api.TrackConsumer
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.vibrate
+import com.example.playlistmaker.domain.shared_preference.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.shared_preference.impl.SearchHistoryInteractorImpl
+import com.example.playlistmaker.utils.services.vibrate
 
 class SearchActivity : AppCompatActivity() {
 
@@ -53,6 +56,10 @@ class SearchActivity : AppCompatActivity() {
     private val searchTracksUseCase = Creator.provideTracksInteractor()
     private val handler = Handler(Looper.getMainLooper())
     private var detailsRunnable: Runnable? = null
+    private lateinit var searchHistoryInteractor: SearchHistoryInteractor
+
+    private var listSearchHistoryTracks = ArrayList<Track>()
+
 
     private lateinit var recyclerViewSearch: RecyclerView
     private lateinit var searchField: EditText
@@ -62,9 +69,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderErrorExtraMessage: TextView
     private lateinit var placeholderErrorRefreshButton: Button
     private lateinit var placeholderErrorLayout: LinearLayout
-
-    private val listSearchHistoryTracks = ArrayList<Track>()
-
 
     private lateinit var searchHistoryLayout: LinearLayout
     private lateinit var searchHistoryClearButton: Button
@@ -80,6 +84,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        searchHistoryInteractor = Creator.provideSearchHistoryInteractor(this)
 
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -99,17 +104,15 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryLayout = findViewById<LinearLayout>(R.id.searchHistoryLayout)
         searchHistoryClearButton = findViewById<Button>(R.id.btnClearSearchHistory)
         searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.rvSearchHistoryList)
-        listSearchHistoryTracks.addAll(
-            SearchHistory(
-                getSharedPreferences(
-                    HISTORY_PREFERENCE,
-                    MODE_PRIVATE
-                )
-            ).getTrackList()
+
+        listSearchQueryTracks.addAll(
+            searchHistoryInteractor.getTrackList()
         )
+
+        updateSearchHistoryList()
+        adapterSearchHistory.tracks = listSearchHistoryTracks
         searchHistoryVisibility()
 
-        adapterSearchHistory.tracks = listSearchHistoryTracks
         searchHistoryRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         searchHistoryRecyclerView.adapter = adapterSearchHistory
@@ -139,7 +142,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchHistoryClearButton.setOnClickListener {
-            SearchHistory(getSharedPreferences(HISTORY_PREFERENCE, MODE_PRIVATE)).clearTrackList()
+            searchHistoryInteractor.clearTrackList()
             updateSearchHistoryList()
             vibrate()
         }
@@ -200,6 +203,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewSearch.visibility = View.GONE
         placeholderErrorLayout.visibility = View.GONE
         progressBar?.visibility = View.VISIBLE
+        searchHistoryVisibility()
         if (queryInput.trim().isNotEmpty()) {
             searchTracksUseCase.searchTracks(
                 expression = queryInput,
@@ -267,7 +271,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun addTrackToHistory(track: Track) {
-        SearchHistory(getSharedPreferences(HISTORY_PREFERENCE, MODE_PRIVATE)).addTrack(track)
+        searchHistoryInteractor.addTrack(track)
         updateSearchHistoryList()
         vibrate()
     }
@@ -282,12 +286,7 @@ class SearchActivity : AppCompatActivity() {
     private fun updateSearchHistoryList() {
         listSearchHistoryTracks.clear()
         listSearchHistoryTracks.addAll(
-            SearchHistory(
-                getSharedPreferences(
-                    HISTORY_PREFERENCE,
-                    MODE_PRIVATE
-                )
-            ).getTrackList()
+            searchHistoryInteractor.getTrackList()
         )
         adapterSearchHistory.notifyDataSetChanged()
         searchHistoryVisibility()
@@ -314,6 +313,9 @@ class SearchActivity : AppCompatActivity() {
     private fun searchHistoryVisibility(condition: Boolean = true) {
         searchHistoryLayout.isVisible =
             condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
+        Log.d("VISIBLE", condition.toString())
+        Log.d("VISIBLE", listSearchHistoryTracks.isNotEmpty().toString())
+        Log.d("VISIBLE", searchField.text.isEmpty().toString())
     }
 
     override fun onDestroy() {

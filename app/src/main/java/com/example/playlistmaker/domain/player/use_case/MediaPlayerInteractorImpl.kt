@@ -1,11 +1,11 @@
 package com.example.playlistmaker.domain.player.use_case
 
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.player.consumer.MediaPlayerInteractor
+import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.repository.MediaPlayerRepository
 import com.example.playlistmaker.domain.player.model.MediaPlayerState
 
-class MediaPlayerUseCase (
+class MediaPlayerInteractorImpl (
     private val mediaPlayerRepository: MediaPlayerRepository
 ): MediaPlayerInteractor{
     override fun prepare(listener: MediaPlayerInteractor.OnStateChangeListener) {

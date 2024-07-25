@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.search.consumer
+package com.example.playlistmaker.domain.search.api
 
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track

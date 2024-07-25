@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.player
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,10 +12,10 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.player.consumer.MediaPlayerInteractor
+import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.model.MediaPlayerState
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.vibrate
+import com.example.playlistmaker.utils.services.vibrate
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -26,7 +25,7 @@ class PlayerActivity : AppCompatActivity() {
         private const val REFRESH_DELAY_MILLIS = 100L
     }
     private var track: Track? = null
-    private val mediaPlayerUseCase = Creator.provideMediaPlayerInteractor()
+    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
     private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
 
@@ -61,12 +60,12 @@ class PlayerActivity : AppCompatActivity() {
         if (track?.previewUrl != null) {
             preparePlayer()
             btnPalyStop.setOnClickListener {
-                when(mediaPlayerUseCase.getMediaPlayerState()){
+                when(mediaPlayerInteractor.getMediaPlayerState()){
                     MediaPlayerState.PREPARED, MediaPlayerState.PAUSED -> {
-                        mediaPlayerUseCase.start()
+                        mediaPlayerInteractor.start()
                     }
                     MediaPlayerState.PLAYING -> {
-                        mediaPlayerUseCase.pause()
+                        mediaPlayerInteractor.pause()
                     }
                     MediaPlayerState.DEFAULT -> {
                     }
@@ -92,8 +91,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer() {
-        track?.let { mediaPlayerUseCase.setMediaPlayerDataSource(it) }
-        mediaPlayerUseCase.prepare(
+        track?.let { mediaPlayerInteractor.setMediaPlayerDataSource(it) }
+        mediaPlayerInteractor.prepare(
         listener = object : MediaPlayerInteractor.OnStateChangeListener{
             override fun onStateChange(state: MediaPlayerState) {
                 when (state) {
@@ -125,7 +124,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun startTimer() {
         mainThreadHandler.postDelayed(object : Runnable {
             override fun run() {
-                trackDuration.text = mediaPlayerUseCase.getMediaPlayerCurrentTime()
+                trackDuration.text = mediaPlayerInteractor.getMediaPlayerCurrentTime()
                 mainThreadHandler.postDelayed(this, REFRESH_DELAY_MILLIS)
             }
         }, REFRESH_DELAY_MILLIS)
@@ -203,14 +202,14 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayerUseCase.pause()
+        mediaPlayerInteractor.pause()
     }
 
 
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayerUseCase.release()
+        mediaPlayerInteractor.release()
         stopTimer()
     }
 

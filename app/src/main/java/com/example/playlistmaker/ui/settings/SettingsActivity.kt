@@ -8,23 +8,28 @@ import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
-import com.example.playlistmaker.SETTINGS_PREFERENCE
-import com.example.playlistmaker.THEME_SWITCHER_KEY
-import com.example.playlistmaker.vibrate
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.data.shared_preference.repository.SettingsRepositoryImpl
+import com.example.playlistmaker.utils.services.vibrate
 import com.google.android.material.switchmaterial.SwitchMaterial
 
+
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var switcherTheme : SwitchMaterial
+    private lateinit var settingsRepository: SettingsRepositoryImpl
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        settingsRepository = Creator.provideSettingsRepository(this)
 
-        val preferences = getSharedPreferences(SETTINGS_PREFERENCE, MODE_PRIVATE)
-        val switcherTheme = findViewById<SwitchMaterial>(R.id.swTheme)
-        switcherTheme.isChecked = preferences.getBoolean(THEME_SWITCHER_KEY, false)
+        switcherTheme = findViewById<SwitchMaterial>(R.id.swTheme)
+
+        switcherTheme.isChecked = settingsRepository.checkDarkMode()
 
         switcherTheme.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
-            preferences.edit().putBoolean(THEME_SWITCHER_KEY, checked).apply()
+            settingsRepository.setDarkMode(checked)
         }
 
         findViewById<ImageView>(R.id.iwShareApp).setOnClickListener {

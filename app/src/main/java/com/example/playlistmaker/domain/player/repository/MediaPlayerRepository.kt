@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.player.repository
 
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.player.consumer.MediaPlayerInteractor
+import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.model.MediaPlayerState
 
 interface MediaPlayerRepository {

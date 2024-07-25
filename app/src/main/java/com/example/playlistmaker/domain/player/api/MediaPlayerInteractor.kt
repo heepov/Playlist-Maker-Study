@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.player.consumer
+package com.example.playlistmaker.domain.player.api
 
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.player.model.MediaPlayerState

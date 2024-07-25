@@ -10,7 +10,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.ui.library.LibraryActivity
 import com.example.playlistmaker.ui.search.SearchActivity
 import com.example.playlistmaker.ui.settings.SettingsActivity
-import com.example.playlistmaker.vibrate
+import com.example.playlistmaker.utils.services.vibrate
 
 @RequiresApi(Build.VERSION_CODES.S)
 class MainActivity : AppCompatActivity() {

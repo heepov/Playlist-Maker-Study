@@ -1,9 +1,8 @@
 package com.example.playlistmaker.data.player.repository
 
 import android.media.MediaPlayer
-import android.util.Log
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.player.consumer.MediaPlayerInteractor
+import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.repository.MediaPlayerRepository
 import com.example.playlistmaker.domain.player.model.MediaPlayerState
 import java.text.SimpleDateFormat

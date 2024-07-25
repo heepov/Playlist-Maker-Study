@@ -1,12 +1,12 @@
 package com.example.playlistmaker.domain.search.use_case
 
 
-import com.example.playlistmaker.domain.search.consumer.TrackConsumer
-import com.example.playlistmaker.domain.search.consumer.TracksInteractor
+import com.example.playlistmaker.domain.search.api.TrackConsumer
+import com.example.playlistmaker.domain.search.api.TracksInteractor
 import com.example.playlistmaker.domain.search.repository.TracksRepository
 import java.util.concurrent.Executors
 
-class SearchTracksUseCase(
+class SearchTracksInteractorImpl(
     private val tracksRepository: TracksRepository
 ) : TracksInteractor {
     private val executor = Executors.newCachedThreadPool()
