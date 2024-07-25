@@ -15,7 +15,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +28,6 @@ import com.example.playlistmaker.domain.search.api.TrackConsumer
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.shared_preference.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.shared_preference.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.utils.services.vibrate
 
 class SearchActivity : AppCompatActivity() {
@@ -53,7 +51,7 @@ class SearchActivity : AppCompatActivity() {
             showTrackView(it)
         }
     }
-    private val searchTracksUseCase = Creator.provideTracksInteractor()
+    private val searchTracksInteractor = Creator.provideTracksInteractor()
     private val handler = Handler(Looper.getMainLooper())
     private var detailsRunnable: Runnable? = null
     private lateinit var searchHistoryInteractor: SearchHistoryInteractor
@@ -205,7 +203,7 @@ class SearchActivity : AppCompatActivity() {
         progressBar?.visibility = View.VISIBLE
         searchHistoryVisibility()
         if (queryInput.trim().isNotEmpty()) {
-            searchTracksUseCase.searchTracks(
+            searchTracksInteractor.searchTracks(
                 expression = queryInput,
                 consumer = object : TrackConsumer {
                     override fun consume(data: Resource<List<Track>>) {
@@ -313,9 +311,6 @@ class SearchActivity : AppCompatActivity() {
     private fun searchHistoryVisibility(condition: Boolean = true) {
         searchHistoryLayout.isVisible =
             condition && listSearchHistoryTracks.isNotEmpty() && searchField.text.isEmpty()
-        Log.d("VISIBLE", condition.toString())
-        Log.d("VISIBLE", listSearchHistoryTracks.isNotEmpty().toString())
-        Log.d("VISIBLE", searchField.text.isEmpty().toString())
     }
 
     override fun onDestroy() {

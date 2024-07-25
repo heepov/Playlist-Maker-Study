@@ -13,7 +13,7 @@ import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.repository.MediaPlayerRepository
 import com.example.playlistmaker.domain.player.use_case.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.search.repository.TracksRepository
-import com.example.playlistmaker.domain.search.use_case.SearchTracksInteractorImpl
+import com.example.playlistmaker.domain.search.impl.SearchTracksInteractorImpl
 import com.example.playlistmaker.domain.shared_preference.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.shared_preference.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.shared_preference.repository.SearchHistoryRepository

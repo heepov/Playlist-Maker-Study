@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.search.use_case
+package com.example.playlistmaker.domain.search.impl
 
 
 import com.example.playlistmaker.domain.search.api.TrackConsumer
