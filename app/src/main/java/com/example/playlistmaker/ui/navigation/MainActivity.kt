@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.navigation
 
 import android.content.Intent
 import android.os.Build
@@ -6,6 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import com.example.playlistmaker.R
+import com.example.playlistmaker.ui.library.LibraryActivity
+import com.example.playlistmaker.ui.search.SearchActivity
+import com.example.playlistmaker.ui.settings.SettingsActivity
+import com.example.playlistmaker.utils.services.vibrate
 
 @RequiresApi(Build.VERSION_CODES.S)
 class MainActivity : AppCompatActivity() {

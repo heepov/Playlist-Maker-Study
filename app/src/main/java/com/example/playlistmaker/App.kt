@@ -1,25 +1,20 @@
 package com.example.playlistmaker
 
 import android.app.Application
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-
-const val SETTINGS_PREFERENCE = "settings_preference"
-const val THEME_SWITCHER_KEY = "theme_switcher_key"
-
-const val HISTORY_PREFERENCE = "history_preference"
-const val TRACKS_KEY = "tracks_key"
+import com.example.playlistmaker.creator.Creator
 
 class App : Application() {
-    private var dakTheme = false
+    private var darkTheme = false
+
     override fun onCreate() {
         super.onCreate()
-        val preferences = getSharedPreferences(SETTINGS_PREFERENCE, MODE_PRIVATE)
-        switchTheme(preferences.getBoolean(THEME_SWITCHER_KEY, false))
+        val settingsInteractor = Creator.provideSettingsInteractor(this)
+        switchTheme(settingsInteractor.checkDarkMode())
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
-        dakTheme = darkThemeEnabled
+        darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
