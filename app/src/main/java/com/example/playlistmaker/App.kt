@@ -9,8 +9,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val settingsRepository = Creator.provideSettingsRepository(this)
-        switchTheme(settingsRepository.checkDarkMode())
+        val settingsInteractor = Creator.provideSettingsInteractor(this)
+        switchTheme(settingsInteractor.checkDarkMode())
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

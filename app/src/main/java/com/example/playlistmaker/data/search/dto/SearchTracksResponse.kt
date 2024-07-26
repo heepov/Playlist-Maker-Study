@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data.search.dto
 
 
-class TracksSearchResponse (
+class SearchTracksResponse (
     val results: List<TrackDto>
 )  : NetworkResponse()

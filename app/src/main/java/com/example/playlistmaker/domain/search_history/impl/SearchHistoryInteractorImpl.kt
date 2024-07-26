@@ -1,8 +1,8 @@
-package com.example.playlistmaker.domain.shared_preference.impl
+package com.example.playlistmaker.domain.search_history.impl
 
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.shared_preference.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.shared_preference.repository.SearchHistoryRepository
+import com.example.playlistmaker.domain.search_history.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.search_history.repository.SearchHistoryRepository
 
 class SearchHistoryInteractorImpl(private val repository: SearchHistoryRepository) : SearchHistoryInteractor {
     override fun getTrackList(): List<Track> {

@@ -1,8 +1,8 @@
-package com.example.playlistmaker.domain.shared_preference.repository
+package com.example.playlistmaker.domain.search_history.api
 
 import com.example.playlistmaker.domain.search.model.Track
 
-interface SearchHistoryRepository {
+interface SearchHistoryInteractor {
     fun getTrackList(): List<Track>
     fun addTrack(track: Track)
     fun clearTrackList()

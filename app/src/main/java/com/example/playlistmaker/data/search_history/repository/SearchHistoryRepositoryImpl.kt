@@ -1,27 +1,27 @@
-package com.example.playlistmaker.data.shared_preference.repository
+package com.example.playlistmaker.data.search_history.repository
 
-import com.example.playlistmaker.data.shared_preference.SharedPreferencesManager
+import android.content.SharedPreferences
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.shared_preference.repository.SearchHistoryRepository
+import com.example.playlistmaker.domain.search_history.repository.SearchHistoryRepository
 import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SearchHistoryRepositoryImpl(private val preferencesManager: SharedPreferencesManager) : SearchHistoryRepository {
+class SearchHistoryRepositoryImpl(private val sharedPreferences: SharedPreferences) : SearchHistoryRepository {
     override fun getTrackList(): List<Track> {
-        val jsonTrackList = preferencesManager.getString(TRACKS_KEY)
+        val jsonTrackList = sharedPreferences.getString(TRACKS_KEY, null)
         return jsonTrackList?.let { createTrackListFromJson(it) } ?: emptyList()
     }
 
     override fun addTrack(track: Track) {
         val trackList = getTrackList().toMutableList()
         checkExistAndAddTrack(track, trackList)
-        checkAndCutTrackList(track, trackList)
-        preferencesManager.putString(TRACKS_KEY, createJsonFromTrackList(trackList))
+        checkAndCutTrackList(trackList)
+        sharedPreferences.edit().putString(TRACKS_KEY, createJsonFromTrackList(trackList)).apply()
     }
 
     override fun clearTrackList() {
-        preferencesManager.clear(TRACKS_KEY)
+        sharedPreferences.edit().remove(TRACKS_KEY).apply()
     }
 
     private fun createJsonFromTrackList(trackList: List<Track>): String {
@@ -33,10 +33,9 @@ class SearchHistoryRepositoryImpl(private val preferencesManager: SharedPreferen
         return Gson().fromJson(jsonTrackList, type)
     }
 
-    private fun checkAndCutTrackList(track: Track, trackList: MutableList<Track>) {
-        trackList.add(track)
+    private fun checkAndCutTrackList(trackList: MutableList<Track>) {
         if (trackList.size > 10) {
-            trackList.removeAt(trackList.size - 1)
+            trackList.subList(10, trackList.size).clear()
         }
     }
 

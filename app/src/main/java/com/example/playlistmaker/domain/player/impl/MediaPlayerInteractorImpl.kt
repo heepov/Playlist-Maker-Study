@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.player.use_case
+package com.example.playlistmaker.domain.player.impl
 
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor

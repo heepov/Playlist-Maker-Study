@@ -8,7 +8,7 @@ import com.example.playlistmaker.domain.player.model.MediaPlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaMediaPlayerRepositoryImpl: MediaPlayerRepository {
+class MediaPlayerRepositoryImpl: MediaPlayerRepository {
     private val mediaPlayer = MediaPlayer()
     private var mediaPlayerState : MediaPlayerState = MediaPlayerState.DEFAULT
     private  lateinit var listner : MediaPlayerInteractor.OnStateChangeListener

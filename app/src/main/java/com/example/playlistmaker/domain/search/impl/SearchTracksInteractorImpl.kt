@@ -1,19 +1,17 @@
 package com.example.playlistmaker.domain.search.impl
 
-
-import com.example.playlistmaker.domain.search.api.TrackConsumer
-import com.example.playlistmaker.domain.search.api.TracksInteractor
-import com.example.playlistmaker.domain.search.repository.TracksRepository
+import com.example.playlistmaker.domain.search.api.SearchTracksInteractor
+import com.example.playlistmaker.domain.search.repository.SearchTracksRepository
 import java.util.concurrent.Executors
 
 class SearchTracksInteractorImpl(
-    private val tracksRepository: TracksRepository
-) : TracksInteractor {
+    private val searchTracksRepository: SearchTracksRepository
+) : SearchTracksInteractor {
     private val executor = Executors.newCachedThreadPool()
 
-    override fun searchTracks(expression: String, consumer: TrackConsumer) {
+    override fun searchTracks(expression: String, consumer: SearchTracksInteractor.TracksConsumer) {
         executor.execute{
-            consumer.consume(tracksRepository.searchTracks(expression))
+            consumer.consume(searchTracksRepository.searchTracks(expression))
         }
     }
 }

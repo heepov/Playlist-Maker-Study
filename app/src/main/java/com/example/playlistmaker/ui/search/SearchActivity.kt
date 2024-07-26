@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -23,11 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.search.api.SearchTracksInteractor
 import com.example.playlistmaker.ui.player.PlayerActivity
-import com.example.playlistmaker.domain.search.api.TrackConsumer
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.shared_preference.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.search_history.api.SearchHistoryInteractor
 import com.example.playlistmaker.utils.services.vibrate
 
 class SearchActivity : AppCompatActivity() {
@@ -205,7 +204,7 @@ class SearchActivity : AppCompatActivity() {
         if (queryInput.trim().isNotEmpty()) {
             searchTracksInteractor.searchTracks(
                 expression = queryInput,
-                consumer = object : TrackConsumer {
+                consumer = object : SearchTracksInteractor.TracksConsumer {
                     override fun consume(data: Resource<List<Track>>) {
                         val currentRunnable = detailsRunnable
                         if (currentRunnable != null) {

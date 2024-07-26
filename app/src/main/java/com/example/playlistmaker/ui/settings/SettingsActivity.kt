@@ -9,27 +9,27 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.data.shared_preference.repository.SettingsRepositoryImpl
+import com.example.playlistmaker.domain.settings.api.SettingsInteractor
 import com.example.playlistmaker.utils.services.vibrate
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var switcherTheme : SwitchMaterial
-    private lateinit var settingsRepository: SettingsRepositoryImpl
+    private lateinit var settingsInteractor: SettingsInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        settingsRepository = Creator.provideSettingsRepository(this)
+        settingsInteractor = Creator.provideSettingsInteractor(this)
 
         switcherTheme = findViewById<SwitchMaterial>(R.id.swTheme)
 
-        switcherTheme.isChecked = settingsRepository.checkDarkMode()
+        switcherTheme.isChecked = settingsInteractor.checkDarkMode()
 
         switcherTheme.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
-            settingsRepository.setDarkMode(checked)
+            settingsInteractor.setDarkMode(checked)
         }
 
         findViewById<ImageView>(R.id.iwShareApp).setOnClickListener {

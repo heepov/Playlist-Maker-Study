@@ -4,7 +4,7 @@ import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
 
 
-interface TracksRepository {
+interface SearchTracksRepository {
     fun searchTracks(expression: String): Resource<List<Track>>
 }
 
