@@ -15,6 +15,7 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
 import com.example.playlistmaker.domain.player.model.MediaPlayerState
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.example.playlistmaker.utils.services.vibrate
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -53,7 +54,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_track)
 
-        track = intent.getParcelableExtra<Track>("track")
+        track = intent.getParcelableExtra<Track>(TRACKS_KEY)
 
         inflateUI()
 

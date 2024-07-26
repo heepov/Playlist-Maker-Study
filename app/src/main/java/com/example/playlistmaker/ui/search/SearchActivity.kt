@@ -27,6 +27,7 @@ import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search_history.api.SearchHistoryInteractor
+import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.example.playlistmaker.utils.services.vibrate
 
 class SearchActivity : AppCompatActivity() {
@@ -275,7 +276,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showTrackView(track: Track) {
         if (clickDebounce()) {
-            val intent = Intent(this, PlayerActivity::class.java).putExtra("track", track)
+            val intent = Intent(this, PlayerActivity::class.java).putExtra(TRACKS_KEY, track)
             startActivity(intent)
         }
     }
