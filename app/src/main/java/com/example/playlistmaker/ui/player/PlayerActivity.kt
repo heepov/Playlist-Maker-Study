@@ -1,82 +1,127 @@
 package com.example.playlistmaker.ui.player
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.player.api.MediaPlayerInteractor
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.player.model.MediaPlayerState
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.presentation.player.model.TrackInfo
+import com.example.playlistmaker.presentation.player.state.PlayerScreenState
+import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.example.playlistmaker.utils.services.vibrate
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 class PlayerActivity : AppCompatActivity() {
-    companion object {
-        private const val REFRESH_DELAY_MILLIS = 100L
-    }
+    private lateinit var viewModel: PlayerViewModel
+    private lateinit var binding: ActivityPlayerBinding
+
     private var track: Track? = null
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
-
-
-    private lateinit var trackCover: ImageView
-    private lateinit var trackTitle: TextView
-    private lateinit var artistName: TextView
-    private lateinit var trackDuration: TextView
-    private lateinit var trackDurationText: TextView
-    private lateinit var trackAlbumText: TextView
-    private lateinit var trackYearText: TextView
-    private lateinit var trackGenreText: TextView
-    private lateinit var trackCountryText: TextView
-    private lateinit var trackDurationValue: TextView
-    private lateinit var trackAlbumValue: TextView
-    private lateinit var trackYearValue: TextView
-    private lateinit var trackGenreValue: TextView
-    private lateinit var trackCountryValue: TextView
-    private lateinit var btnPalyStop: Button
-
-
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_track)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         track = intent.getParcelableExtra<Track>(TRACKS_KEY)
+        viewModel = ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory(track)
+        ).get(PlayerViewModel::class.java)
 
-        inflateUI()
+        setupObservers()
+    }
 
-        if (track?.previewUrl != null) {
-            preparePlayer()
-            btnPalyStop.setOnClickListener {
-                when(mediaPlayerInteractor.getMediaPlayerState()){
-                    MediaPlayerState.PREPARED, MediaPlayerState.PAUSED -> {
-                        mediaPlayerInteractor.start()
-                    }
-                    MediaPlayerState.PLAYING -> {
-                        mediaPlayerInteractor.pause()
-                    }
-                    MediaPlayerState.DEFAULT -> {
+    private fun setupObservers() {
+        viewModel.screenState.observe(this) { screenState ->
+            when (screenState) {
+                is PlayerScreenState.Loading -> {
+                }
+
+                is PlayerScreenState.Content -> {
+                    inflateUI(screenState.track)
+                    binding.btnPlayStop.setOnClickListener {
+                        viewModel.onPlayPauseClicked()
                     }
                 }
+
+                is PlayerScreenState.Error -> {
+                    binding.btnPlayStop.setBackgroundResource(R.drawable.ic_cant_play)
+                }
             }
-        } else {
-            btnPalyStop.setBackgroundResource(R.drawable.ic_cant_play)
+        }
+
+        viewModel.mediaPlayerStateLiveData.observe(this) { state ->
+            when (state) {
+                MediaPlayerState.PREPARED -> {
+                    binding.btnPlayStop.setBackgroundResource(R.drawable.ic_play)
+                    binding.btnPlayStop.isEnabled = true
+                    binding.btnPlayStop.alpha = 1f
+                }
+
+                MediaPlayerState.PLAYING -> {
+                    binding.btnPlayStop.setBackgroundResource(R.drawable.ic_pause)
+                }
+
+                MediaPlayerState.PAUSED -> {
+                    binding.btnPlayStop.setBackgroundResource(R.drawable.ic_play)
+                }
+
+                MediaPlayerState.DEFAULT -> {
+                    binding.btnPlayStop.isEnabled = false
+                    binding.btnPlayStop.setBackgroundResource(R.drawable.ic_play)
+                }
+            }
+        }
+        viewModel.trackTimeLiveData.observe(this) { trackTime ->
+            binding.tvTrackDuration.text = trackTime
         }
     }
 
+    private fun inflateUI(trackInfo: TrackInfo) {
+        Glide.with(applicationContext)
+            .load(trackInfo.trackCover.replaceAfterLast('/', "512x512bb.jpg"))
+            .placeholder(R.drawable.placeholder)
+            .centerCrop()
+            .into(binding.ivTrackCover)
+
+        binding.tvTrackTitle.text = trackInfo.trackTitle
+        binding.tvArtistName.text = trackInfo.artistName
+        binding.tvTrackDurationValue.text = trackInfo.trackDuration
+
+
+
+        binding.toolBar.setNavigationOnClickListener {
+            vibrate()
+            finish()
+        }
+        checkAndSetTrackInformationField(
+            trackInfo.trackAlbum,
+            binding.tvTrackAlbumText,
+            binding.tvTrackAlbumValue
+        )
+        checkAndSetTrackInformationField(
+            trackInfo.trackYear,
+            binding.tvTrackYearText,
+            binding.tvTrackYearValue
+        )
+        checkAndSetTrackInformationField(
+            trackInfo.trackGenre,
+            binding.tvTrackGenreText,
+            binding.tvTrackGenreValue
+        )
+        checkAndSetTrackInformationField(
+            trackInfo.trackCountry,
+            binding.tvTrackCountryText,
+            binding.tvTrackCountryValue
+        )
+    }
 
     private fun checkAndSetTrackInformationField(
         str: String,
@@ -91,127 +136,20 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun preparePlayer() {
-        track?.let { mediaPlayerInteractor.setMediaPlayerDataSource(it) }
-        mediaPlayerInteractor.prepare(
-        listener = object : MediaPlayerInteractor.OnStateChangeListener{
-            override fun onStateChange(state: MediaPlayerState) {
-                when (state) {
-                    MediaPlayerState.PREPARED -> {
-                        btnPalyStop.setBackgroundResource(R.drawable.ic_play)
-                        btnPalyStop.isEnabled = true
-                        btnPalyStop.setAlpha(1f)
-                        resetTimer()
-                    }
-                    MediaPlayerState.PLAYING -> {
-                        btnPalyStop.setBackgroundResource(R.drawable.ic_pause)
-                        startTimer()
-                    }
-                    MediaPlayerState.PAUSED -> {
-                        btnPalyStop.setBackgroundResource(R.drawable.ic_play)
-                        stopTimer()
-                    }
-                    MediaPlayerState.DEFAULT -> {
-                        btnPalyStop.isEnabled = false
-                        btnPalyStop.setBackgroundResource(R.drawable.ic_play)
-                    }
-                }
-            }
-        }
-        )
-    }
-
-
-    private fun startTimer() {
-        mainThreadHandler.postDelayed(object : Runnable {
-            override fun run() {
-                trackDuration.text = mediaPlayerInteractor.getMediaPlayerCurrentTime()
-                mainThreadHandler.postDelayed(this, REFRESH_DELAY_MILLIS)
-            }
-        }, REFRESH_DELAY_MILLIS)
-    }
-
-    private fun stopTimer() {
-        mainThreadHandler.removeCallbacksAndMessages(null)
-    }
-
-    private fun resetTimer(){
-        stopTimer()
-        trackDuration.text = dateFormat.format(0L)
-    }
-
-    private fun inflateUI() {
-        trackCover = findViewById(R.id.ivTrackCover)
-        trackTitle = findViewById(R.id.tvTrackTitle)
-        artistName = findViewById(R.id.tvArtistName)
-        trackDuration = findViewById(R.id.tvTrackDuration)
-        trackDurationText = findViewById(R.id.tvTrackDurationText)
-        trackAlbumText = findViewById(R.id.tvTrackAlbumText)
-        trackYearText = findViewById(R.id.tvTrackYearText)
-        trackGenreText = findViewById(R.id.tvTrackGenreText)
-        trackCountryText = findViewById(R.id.tvTrackCountryText)
-        trackDurationValue = findViewById(R.id.tvTrackDurationValue)
-        trackAlbumValue = findViewById(R.id.tvTrackAlbumValue)
-        trackYearValue = findViewById(R.id.tvTrackYearValue)
-        trackGenreValue = findViewById(R.id.tvTrackGenreValue)
-        trackCountryValue = findViewById(R.id.tvTrackCountryValue)
-        btnPalyStop = findViewById(R.id.btnPlayStop)
-
-        findViewById<Toolbar>(R.id.toolBar).setNavigationOnClickListener {
-            vibrate()
-            finish()
-        }
-
-
-        Glide.with(applicationContext)
-            .load(track?.coverUrl?.replaceAfterLast('/', "512x512bb.jpg"))
-            .placeholder(R.drawable.placeholder)
-            .centerCrop()
-            .into(trackCover)
-
-        trackTitle.text = track?.trackName
-        artistName.text = track?.artistName
-        trackDuration.text = dateFormat.format(0L)
-        trackDurationValue.text = dateFormat.format(track?.trackTimeMillis)
-
-        checkAndSetTrackInformationField(
-            track?.collectionName.toString(),
-            trackAlbumText,
-            trackAlbumValue
-        )
-        checkAndSetTrackInformationField(
-            track?.releaseDate?.substring(0, 4).toString(),
-            trackYearText,
-            trackYearValue
-        )
-        checkAndSetTrackInformationField(
-            track?.primaryGenreName.toString(),
-            trackGenreText,
-            trackGenreValue
-        )
-        checkAndSetTrackInformationField(
-            track?.country.toString(),
-            trackCountryText,
-            trackCountryValue
-        )
-    }
-
 
     override fun onStop() {
         super.onStop()
+        viewModel.pausePlayback()
     }
 
     override fun onPause() {
         super.onPause()
-        mediaPlayerInteractor.pause()
+        viewModel.pausePlayback()
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayerInteractor.release()
-        stopTimer()
+        viewModel.releaseResources()
     }
 
 }

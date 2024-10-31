@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -27,6 +28,7 @@ import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search_history.api.SearchHistoryInteractor
+import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
 import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.example.playlistmaker.utils.services.vibrate
 
@@ -38,6 +40,9 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
+    private lateinit var viewModel: SearchViewModel
+
 
     private val listSearchQueryTracks = ArrayList<Track>()
     private val adapterSearchQuery: TrackAdapter by lazy {
@@ -82,6 +87,9 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+
         searchHistoryInteractor = Creator.provideSearchHistoryInteractor(this)
 
         val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
