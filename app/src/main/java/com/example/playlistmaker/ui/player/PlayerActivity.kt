@@ -15,7 +15,6 @@ import com.example.playlistmaker.presentation.player.state.PlayerScreenState
 import com.example.playlistmaker.presentation.player.view_model.PlayerViewModel
 import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.example.playlistmaker.utils.services.vibrate
-import java.util.Locale
 
 
 class PlayerActivity : AppCompatActivity() {
@@ -39,7 +38,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.screenState.observe(this) { screenState ->
+        viewModel.screenStateLiveData.observe(this) { screenState ->
             when (screenState) {
                 is PlayerScreenState.Loading -> {
                 }

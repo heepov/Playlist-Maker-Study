@@ -21,7 +21,7 @@ class PlayerViewModel(
 ) : ViewModel() {
 
     private val _screenState = MutableLiveData<PlayerScreenState>()
-    val screenState: LiveData<PlayerScreenState> get() = _screenState
+    val screenStateLiveData: LiveData<PlayerScreenState> get() = _screenState
 
     private val _mediaPlayerState = MutableLiveData<MediaPlayerState>()
     val mediaPlayerStateLiveData: LiveData<MediaPlayerState> get() = _mediaPlayerState
@@ -129,8 +129,6 @@ class PlayerViewModel(
         super.onCleared()
         releaseResources()
     }
-
-    fun getScreenStateLiveData(): LiveData<PlayerScreenState> = screenState
 
     companion object {
         fun getViewModelFactory(track: Track?): ViewModelProvider.Factory =

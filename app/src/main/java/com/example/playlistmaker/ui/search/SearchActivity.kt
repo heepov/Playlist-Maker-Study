@@ -28,11 +28,13 @@ import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.domain.search.model.Resource
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search_history.api.SearchHistoryInteractor
-import com.example.playlistmaker.presentation.search.view_model.SearchViewModel
+import com.example.playlistmaker.presentation.search.view_model.SearchTracksViewModel
 import com.example.playlistmaker.utils.constants.Constants.TRACKS_KEY
 import com.example.playlistmaker.utils.services.vibrate
 
 class SearchActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: SearchTracksViewModel
 
     companion object {
         const val SEARCH_STRING_KEY = "SEARCH_STRING_KEY"
@@ -40,8 +42,6 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
-
-    private lateinit var viewModel: SearchViewModel
 
 
     private val listSearchQueryTracks = ArrayList<Track>()
@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity() {
             showTrackView(it)
         }
     }
-    private val searchTracksInteractor = Creator.provideTracksInteractor()
+    private val searchTracksInteractor = Creator.provideSearchTracksInteractor()
     private val handler = Handler(Looper.getMainLooper())
     private var detailsRunnable: Runnable? = null
     private lateinit var searchHistoryInteractor: SearchHistoryInteractor
@@ -88,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SearchTracksViewModel::class.java]
 
         searchHistoryInteractor = Creator.provideSearchHistoryInteractor(this)
 

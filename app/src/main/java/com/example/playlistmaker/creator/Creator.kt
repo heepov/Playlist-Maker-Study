@@ -25,11 +25,11 @@ import com.example.playlistmaker.utils.constants.Constants.SETTINGS_PREFERENCE
 object Creator {
 
     // SEARCH TRACKS ///////////////////////////
-    fun provideTracksInteractor(): SearchTracksInteractor {
-        return SearchTracksInteractorImpl(getTracksRepository())
+    fun provideSearchTracksInteractor(): SearchTracksInteractor {
+        return SearchTracksInteractorImpl(getSearchTracksRepository())
     }
 
-    private fun getTracksRepository(): SearchTracksRepository {
+    private fun getSearchTracksRepository(): SearchTracksRepository {
         return SearchTracksRepositoryImpl(RetrofitNetworkClient())
     }
     ///////////////////////////
